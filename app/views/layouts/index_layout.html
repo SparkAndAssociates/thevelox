@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html class="<%= actionName %>">
+<head>
+	<meta charset="utf-8">
+
+	<title><%= t('global.title') %></title>
+	<link href="/stylesheets/index.css" media="all" rel="stylesheet" type="text/css" />
+	<link href="/stylesheets/font-awesome.css" media="screen" rel="Stylesheet" type="text/css" />
+	<!--[if lt IE 9]><script src="/javascripts/vendor/html5shiv.js?v=0.9.12-11"></script><![endif]-->
+
+</head>
+<body class="group">
+
+<header id="top">
+	<div class="row">
+		<a href="/#"><h2 id="logo"><span class="icon-large icon-cloud" style="color: #bbb;"><%= t('global.title') %></span></h2></a>
+		<menu>
+			<li><a class="din text" href="#features"><%= t('front.features') %></a></li>
+			<!--li><a class="din text" href="#pricing"><%= t('front.pricing') %></a></li-->
+			<li><a class="din text" href="#support"><%= t('front.support') %></a></li>
+			<li><a class="blue button inset-text" href="/signup"><%= t('global.signup') %></a></li>
+			<li><a class="button inset-text" href="/signin"><%= t('global.signin') %></a></li>
+		</menu>
+	</div>
+
+	<hr class="bar">
+</header>
+
+<%- body %>
+
+<footer id="bot">
+	<div class="left">
+		<p>© SPARK & ASSOCIATES, 2013</p>
+		<ul class="linky">
+				<li><a href="/#features"><%= t('front.features') %></a></li>
+				<li><a href="/#pricing"><%= t('front.pricing') %></a></li>
+				<li><a href="/#support"><%= t('front.support') %></a></li>
+			<li><a href="/privacy"><%= t('front.privacy') %></a></li>
+		</ul>
+	</div>
+
+	<div class="right" style="display:none">
+		<p>Stay Connected</p>
+		<ul class="social">
+			<li><a href="https://twitter.com/velox" target="_blank" class="twitter">Twitter</a></li>
+			<li><a href="https://www.facebook.com/velox" target="_blank" class="facebook">Facebook</a></li>
+		</ul>
+	</div>
+</footer>
+
+<script type="text/javascript">
+var _gaq = _gaq || []
+  , pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+
+_gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+_gaq.push(['_setAccount', '<%= app.config.trackCode %>']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+</body>
+</html>

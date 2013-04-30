@@ -1,0 +1,34 @@
+<div id="dialog" class="copy">
+  <h3 class="icon-copy"><%= t('copy.title') %></h3>
+
+  <form action="/files/<%= params.box %>/copy" id="share_form" class="dialog-content" method="post" onsubmit="return Assets.copy(this);">
+    <p style="font-size: 13px; margin: 10px 0;"><%= t('copy.message') %></p>
+
+    <fieldset>
+      <label class="title"><%- t(['copy.where', '<strong id="copy_items"></strong>']) %>:</label>
+      <select name="where">
+        <% boxes.forEach(function(item) {  %>
+          <option value="<%=item.boxInfo.id%>"><%=item.userInfo.name%>/<%=item.boxInfo.name%></option>
+        <% }); %>
+      </select>
+    </fieldset>
+
+    <fieldset class="option">
+      <label class="title"><%= t('copy.how') %>:</label>
+      <input type="radio" name="how" value="newitem" id="copyasnewitem" checked="checked"/><label for="copyasnewitem" class="desc"><%= t('copy.newitem') %></label>
+      <input type="radio" name="how" value="version" id="copyasversion"/><label for="copyasversion" class="desc"><%= t('copy.version') %></label>
+    </fieldset>
+
+    <fieldset class="actions">
+      <button class="button ok"><%= t('actions.copy') %></button>
+      <button class="button" id="cancel" onclick="Velox.hideDialog(event)"><%= t('actions.cancel') %></button>
+    </fieldset>
+  </form>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  (function() {
+    var count = Assets.serializeSelectedAsPlainText().split(',').length;
+    $('copy_items').update(count == 1 ? count + ' <%= t("global.item") %>' : count + ' <%= t("global.items") %>');
+  })();
+</script>

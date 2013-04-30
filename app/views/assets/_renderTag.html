@@ -1,0 +1,22 @@
+ <div class="toolbar-extension">
+	<header><h3><%= t('filter.systemtag') %></h3></header>
+  <div id="auto_tags" class="matrixselect">
+    <div id="filter_start" style="float:none;height:0px;width:0px;margin:0;border:0;padding:0;clear:both"><!-- --></div>
+    <div class="autotag" id="autotag_today" onclick="Assets.toggleTagFilter(this, 'today')"><%= t('filter.today') %></div>
+    <div class="autotag" id="autotag_lastweek" onclick="Assets.toggleTagFilter(this, 'lastweek')"><%= t('filter.lastweek') %></div>
+    <div class="autotag" id="autotag_documents" onclick="Assets.toggleTagFilter(this, 'documents')"><%= t('filter.documents') %></div>
+    <div class="autotag" id="autotag_media" onclick="Assets.toggleTagFilter(this, 'media')"><%= t('filter.media') %></div>
+    <div class="autotag" id="autotag_sent" onclick="Assets.toggleTagFilter(this, 'sent')"><%= t('filter.sent') %></div>
+    <div class="autotag" id="autotag_received" onclick="Assets.toggleTagFilter(this, 'received')"><%= t('filter.received') %></div>
+    <div class="autotag" id="autotag_untagged" onclick="Assets.toggleTagFilter(this, 'untagged')"><%= t('filter.untagged') %></div>
+    <div class="autotag" id="autotag_deleted" onclick="Assets.toggleTagFilter(this, 'deleted')"><%= t('filter.deleted') %></div>
+  </div>
+  <header><h3><%= t('filter.usertag') %></h3></header>
+  <div id="document_tags" class="matrixselect">
+    <% project.tags.forEach(function(tag) { %>
+      <div class="tag" id="tag_<%= tag.id %>" onclick="Assets.toggleTagFilter(this, '<%= tag.id %>')" title="<%= tag.name %>"><%= tag.name %></div>
+    <% }); %>
+    <div id="filter_end" style="float:none;height:0px;width:0px;margin:0;border:0;padding:0;clear:both"><!-- --></div>
+  </div>
+</div>
+

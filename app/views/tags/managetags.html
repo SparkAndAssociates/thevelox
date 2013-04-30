@@ -1,0 +1,133 @@
+<div class="tags-manage">
+  <form action="/tags/<%=params.box %>/create" id="tag-add-form" method="post">
+    <input id="tag_tag" maxlength="18" name="tag[tag]" size="18" type="text" /> 
+    <button type="submit"><%= t('actions.add') %></button>
+    <span id="add-tag-message" class="tags-manage-error"> </span>
+  </form>
+  <ul id="taglist" class="sortable">
+    <% tags.forEach(function(tag) { %>
+      <li id="taglist_<%= tag.id %>">
+        <span class="tags-manage-controls">
+          <a class="tags-manage-del icon-remove-sign" href="/tags/<%=params.box%>/destroy/<%= tag.id %>" title="<%= t('tags.delete') %>"><%= t('actions.delete') %></a>
+        </span>
+        <span class="tags-manage-tag"><span id="taglabel_<%= tag.id %>"><%= tag.name %></span></span>
+        <span class="tags-manage-handler icon-reorder" title="<%= t('tags.reorder') %>"> </span>
+      </li>
+    <% }); %>
+  </ul>
+</div>
+
+<script>
+  $('tag_tag').focus();
+
+  $('tag-add-form').observe('submit', function(event) {
+    event.stop();
+    if (!$('tag_tag').value.strip()) return;
+    var form = event.element();
+    new Ajax.Request(form.action, {
+      asynchronous: true,
+      evalScripts: true,
+      parameters: form.serialize(),
+      onSuccess: function() {
+        Assets.notAvailableTags = false;
+        Assets.updateMenu();
+      }
+    });
+  });
+
+  $$('.tags-manage-tag > span').each(function(el) {
+    var id = el.id.split('_')[1]
+      , li = el.up('li');
+
+    li.down('a').observe('click', function(event) {
+      event.stop();
+      Velox.confirm('removetag', function() {
+        var del = event.element();
+        new Ajax.Request(del.href, {
+          asynchronous:true,
+          evalScripts:true,
+          onComplete:function(request) {
+            new Effect.Fade(li, {
+              duration: 0.5,
+              afterFinish:function(effect) {
+                effect.element.remove();
+              }
+            });
+  
+            el.editor.dispose();
+            $('tag_' + id).remove();
+            var tagInPanel = $("edit_multi_" + id);
+            if (tagInPanel) tagInPanel.remove();
+  
+            Assets.notAvailableTags = !$$('#document_tags > div.tag').length;
+            if (Assets.notAvailableTags && $('tags-panel').visible()) Velox.hidePanels();
+  
+            Assets.updateMenu();
+          }
+        });
+      });
+    });
+  
+    el.editor = new Ajax.InPlaceEditor(el.id, '/tags/<%= params.box %>/edit/' + id, {
+      size: 18,
+      //okControl: false,
+      //cancelControl: false,
+      //submitOnBlur: true,
+      //okText: 'Update',
+      //cancelText: 'Cancel',
+      //ajaxOptions: {method: 'post'},
+      clickToEditText: "<%= t('tags.edit') %>",
+      onEnterEditMode: function(self, value) {
+        setTimeout(function() {
+          self._form.down('input[type="text"]').observe('blur', function(event) {
+            self._form.down('input[type="submit"]').click();
+            event.stop();
+          }).observe('keydown', function(event) {
+            if (event.which == 27) {
+              self._form.down('a').click();
+              event.stop();
+            }
+          });
+        }, 10);
+      },
+      callback: function(form, value) {
+        if (!value.strip()) value = 'unnamed';
+        return 'tag=' + encodeURIComponent(value);
+      },
+      onComplete: function(transport, element) {
+        new Effect.Highlight(element.up('li'), {
+          afterFinish: function(fx) {
+            fx.element.setStyle({'background': ''});
+          }
+        });
+
+        //Assets.nothingHappened = true;
+        //Assets.refresh('tags');
+
+        $("tag_" + id)
+          .writeAttribute("title", transport.responseText)
+          .update(transport.responseText);
+
+        var tagInPanel = $("edit_multi_" + id);
+        if (tagInPanel) tagInPanel.down('b').update(transport.responseText);
+      }
+    });
+  });
+
+  Sortable.create("taglist", {
+    elements: $$('ul#taglist li'),
+    onUpdate: function() {
+      new Ajax.Request('/tags/<%= params.box %>/reorder', {
+        asynchronous: true,
+        evalScripts: true,
+        parameters: Sortable.serialize("taglist"),
+        onSuccess: function() {
+          Sortable.sequence("taglist").each(function(id) {
+            $('document_tags').insert($('tag_' + id));            
+          });
+        }
+      });
+    },
+    scroll: 'managetags-panel'
+  });
+</script>

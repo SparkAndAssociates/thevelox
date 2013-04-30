@@ -1,0 +1,71 @@
+<% if (wrapper) { %>
+<div id="preview-panel-content" class="panel-contents" style="background:transparent; height:100%;" ontouchstart="Velox.stopEvent(event)" onclick="Velox.hideDialog(event);">
+<% } %>
+  <div id="preview-wrapper">
+    <div id="preview-border" style="">
+      <img id="preview" <%- wrapper ? 'class="zoom"' : '' %> src="/files/<%=params.box%>/direct/<%= file.id %>" style="opacity:0" alt="" />
+    </div>
+  </div>
+
+  <div id="doc-title" class="title" style="position:relative;text-align:center;color:#eee;font-size:14px;margin-top:10px;display:none;">
+    <a href="/files/<%=params.box%>/download/<%= file.id %>" target="_blank" title="<%= t('global.download') %>"><b><%= file.name %></b></a><br />
+  </div>
+
+<% if (wrapper) { %>
+</div>
+
+<div class="panel-header">
+  <div class="paging" id="preview-paging">
+    <a href="#" title="Previous asset" id="preview-paging-previous" class="paging-previous">&larr; <%= t('actions.previous') %></a>
+    <p id="preview-paging-position" class="paging-position"> </p>
+    <a href="#" title="Next asset" id="preview-paging-next" class="paging-next"><%= t('actions.next') %> &rarr;</a>
+  </div>
+
+  <div id="controls">
+    <div onclick="Velox.changeOverlayColor('fff')" style="background-color:#fff;"></div>
+    <div onclick="Velox.changeOverlayColor('7f7f7f')" style="background-color:#7f7f7f;"></div>
+    <div onclick="Velox.changeOverlayColor('000')" style="background-color:#000;"></div>
+  </div>
+</div>
+<% } %>
+
+<script type="text/javascript" charset="utf-8">
+  
+(function() {
+  var previewImg = $('preview');
+  if (!previewImg) return;
+  
+  previewImg.docTitle = $('doc-title');
+  previewImg.imgBorder = $('preview-border');
+  previewImg.imgWrapper = $('preview-wrapper'); 
+  
+  // add page navigation
+  // fire event on image loading complete
+  previewImg.onCompleteLoadImage = function() {
+    var winSize = Position.getPageSize().window;
+    Assets.resizePreview(winSize.width, winSize.height, previewImg);
+
+    //Effect.Appear('preview',{duration:0.5});
+
+    previewImg.setOpacity(1);
+    previewImg.docTitle.show();
+
+    Velox.overlay.addClassName('no-spinner').update('');
+  };
+
+  // check for image loaded
+  previewImg.loader = new Image();
+  previewImg.loader.src = previewImg.src; 
+
+  try{
+    if (previewImg.loader.complete) {
+      previewImg.onCompleteLoadImage();
+    } else {
+      previewImg.loader.onload = previewImg.onCompleteLoadImage;
+    }
+  } catch(e) {
+    previewImg.onCompleteLoadImage();
+  }
+})();
+
+</script>

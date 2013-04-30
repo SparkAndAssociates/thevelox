@@ -1,0 +1,237 @@
+<%
+ var _prop = _file(file, params.box, true);
+ if (wrapper) {
+%>
+<div class="panel-header">
+  <div class="title icon-edit"><%= t('edit.title') %></div>
+  <div class="close" onclick="Velox.hidePanels()"><%= t('actions.close-panel') %></div> 
+  <div class="paging" id="edit-paging">
+    <a href="#" title="Previous asset" id="edit-paging-previous" class="paging-previous">&larr; <%= t('actions.previous') %></a>
+    <p id="edit-paging-position" class="paging-position"> </p>
+    <a href="#" title="Next asset" id="edit-paging-next" class="paging-next"><%= t('actions.next') %> &rarr;</a>
+  </div>
+</div>
+
+<div class="panel-contents" id="edit-panel-content">
+<% } %>
+
+  <div class="image <%= _prop.thumb %>">
+    <img src="<%= _prop.rel %>" style="<%= _prop.style %>" title="<%=file.name%>" <%- _prop.preview ? 'onclick="Assets.preview(\'' + file.id + '\')"' : '' %>/>
+  </div>
+
+  <div class="metadata-block">
+
+    <div class="block" <%- !wrapper && 'style="display: none"' %>>
+      <h2><a href="#" title="<%= t('edit.toggle') %>" onclick="return Assets.showHideBlock(this)"><%= t('edit.overview') %></a></h2>
+
+      <div class="metadata-contents">
+        <dl>
+          <dt><%= t('edit.filename') %></dt>
+          <dd><span id="file_name"><%= file.name %></span></dd>
+        </dl>
+    
+        <dl>
+          <dt><%= t('edit.description') %></dt>
+          <dd><span id="file_description"><%= file.description || 'No description' %></span></dd>
+        </dl>
+   
+        <dl>
+          <dt><%= t('edit.author') %></dt>
+          <dd><%= _name(file, session.user.dispname) %></dd>
+        </dl>
+
+        <dl>
+          <dt><%= t('edit.uploaded') %></dt>
+          <dd><%= _format(file.uploadDate, t.locale, session.user.timezone) %></dd>
+        </dl>
+
+        <dl>
+          <dt><%= t('edit.updater') %></dt>
+          <dd><%= _name(file, session.user.dispname, true) %></dd>
+        </dl>
+    
+        <dl>
+          <dt><%= t('edit.updated') %></dt>
+          <dd><%= _format(file.lastModifyDate, t.locale, session.user.timezone) %></dd>
+        </dl>       
+   
+        <dl>
+          <dt><%= t('edit.size') %></dt>
+          <dd><%= _size(file.size) %></dd>
+        </dl>
+    
+        <dl>
+          <dt><%= t('edit.tags') %></dt>
+          <dd>
+             <% autotags.forEach(function(tag) { %>
+                <div class="autotag"><%= t('filter.' + tag) %></div>
+            <%})%>
+            <% boxtags.forEach(function(tag) { %>
+              <div class="tag"><%= tag %></div>
+            <%})%>
+           
+          </dd>
+        </dl>
+
+        <!--div class="matrixselect" style="border:1px solid #A7A7A7; font-weight:normal; width:98%; padding-right: 4px;">
+          <div id="tag_22386">Work</div>
+          <div id="tag_22387">Home</div>
+          <div class="active" id="tag_22388">Private</div>
+          <div id="tag_22389">Public</div>
+          <div id="tag_22391">Velox</div>
+          <div id="tag_22392">DeployCentral</div>
+          <div class="active" id="tag_22393">Office</div>
+          <div id="tag_22394">Development</div>
+        </div-->
+
+      </div>
+    </div>
+    
+    <div class="block" <%- !wrapper && 'style="display: none"' %>>
+      <h2><a href="#" title="<%= t('edit.toggle') %>" onclick="return Assets.showHideBlock(this)"><%= t('edit.versions') %></a></h2>
+      <div class="metadata-contents" style="position: relative;" id="versions">
+        <button class="button icon-plus-sign" title="Add new version" style="position: absolute; top: 2px; right: 10px; padding-right: 0;" onclick="Assets.addNewVersionBrowse(event, '<%= file.id %>')"></button>
+        <%
+
+          if (file.versions && file.versions.length > 0) {
+            var index = file.versions.length + 1;
+            file.versions.forEach(function(child, idx) {
+            if (idx > 9) return false;
+        %>
+
+            <dl>
+              <dt id="version_<%=child._id%>" style="width: 50px;">Ver.<%=--index%></dt>
+              <dt style="width: 120px;"><%= _format(child.uploadDate || new Date, t.locale, session.user.timezone) %></dt>
+              <dd style="margin-left: 50px;"><%- t(['edit.version', '<a href="/files/' + params.box + '/download/' + child._id + '">' + child.name + '</a>', _size(child.size), _when(child.uploadDate || new Date, t.locale, session.user.timezone), _name(child, session.user.dispname, true) || 'unknown']) %></dd>
+            </dl>
+
+        <%
+
+          });
+
+        } else {
+
+        %>
+            <dl class="empty"><p><%= t('edit.no-version') %></p></dl>
+        <%
+
+        }
+        %>
+      </div>
+    </div>
+
+    <div class="block log" <%- !wrapper && 'style="display: none"' %>>
+      <h2><a href="#" title="<%= t('edit.toggle') %>" onclick="return Assets.showHideBlock(this)"><%= t('histories.title') %></a></h2>
+      <div class="metadata-contents" style="position: relative;">
+        <button class="button icon-rss" title="Subscribe to this file history feed" style="position: absolute; top: 2px; right: 10px; padding-right: 0;" onclick="location.href = '/files/<%= params.box %>/atom/<%= file.id %>'"></button>
+        <%
+        if (histories.length) {
+          histories.forEach(function(log) {
+
+            // Migration
+            if (!log.how) {
+              log.how = log.what;
+              if (log.args) log.what = log.args;
+              else if (log.how.match(/createlink|updatelink|multiplelink|downloadlink|edit/)) log.what = {};
+              else log.what = 'Unknown';
+            }
+
+            // FIXME
+            if (log.how.match(/createlink|updatelink|multiplelink|downloadlink/) && !log.what) {
+              console.log('FIXME: wrong log data - ' + log.how);
+              log.what = {};
+            }
+
+            var replaces = [];
+            if (log.how.match(/createnote|readnote|updatenote/))
+              replaces.push('<a href="/notes/' + params.box + '/show/' + log.what.id + '" onclick="return Assets.showNote(this, \'' + log.what.id + '\')">' + t('histories.notepaper') + '</a>');
+            if (log.how.match(/copyto|copyfrom/))
+              replaces.push(log.where.name == 'Items' ? t('histories.privatebox') : '<a href="/assets/' + log.where.id + '">' + log.where.name + '</a>');
+            if (log.how.match(/assigntag|unassigntag/))
+              replaces.push(log.what);
+            if (log.how == 'edit')
+              replaces = [log.what.field && t('edit.' + log.what.field) || 'unknown', log.what.from || 'unknown', log.what.to || 'unknown'];
+            if (log.how == 'revision')
+              replaces.push(log.what);
+            if (log.how.match(/createlink|updatelink|multiplelink|downloadlink|accesslink/)) {
+              replaces.push('<a href="/delivery/' + log.what.id + '">' + (log.what.subject || t('histories.sharelink')) + '</a>');
+            }
+
+            replaces = replaces.concat([_when(log.when, t.locale, session.user.timezone), _name(log.who, session.user.dispname) || log.who.email || log.who.ip]);
+        %>
+          <dl>
+            <dt style="width: 50px;"><%= log.type || 'Log' %></dt>
+            <dt style="width: 120px;"><%= _format(log.when, t.locale, session.user.timezone) %></dt>
+            <dd><%- t(['histories.' + log.how].concat(replaces)) %></dd>
+          </dl>
+        <%
+
+          });
+        } else {
+
+        %>
+          <dl class="empty"><p><%= t('histories.no-log') %></p></dl>
+        <%
+
+        }
+
+        %>
+      </div>
+    </div>
+  </div>
+  
+<% if (wrapper) { %>
+</div>
+<% } %>
+
+<script>
+
+(function() {
+  var els = $('edit-panel-content').select('.block');
+  if (Assets._hideBlocks) {
+    Assets._hideBlocks.each(function(hide, i) {
+      el = els[i]
+      if (hide) {
+        el = els[i];
+        el.down('a').addClassName('closed')
+        el.down('.metadata-contents').hide();
+      }
+    });
+  }
+  els.invoke('show');
+
+  $$('#file_name, #file_description').each(function(el) {
+    if (el.editor) return;
+
+    el.editor = new Ajax.InPlaceEditor(el.id, '/files/<%= params.box %>/edit/<%= file.id %>', {
+      size: 125,
+      //rows: el.id == 'file_description' ? 5 : 0,
+      clickToEditText: 'Click to edit',
+      onEnterEditMode: function(self, value) {
+        setTimeout(function() {
+          self._form.down('input[type="text"]').observe('blur', function(event) {
+            self._form.down('input[type="submit"]').click();
+            event.stop();
+          }).observe('keydown', function(event) {
+            if (event.which == 27) {
+              self._form.down('a').click();
+              event.stop();
+            }
+          });
+        }, 10);
+      },
+      callback: function(form, value) {
+        return el.id.split('_')[0] + '=' + encodeURIComponent(value);
+      },
+      onComplete: function(transport, element) {
+        element.id == 'file_name' && $('document_<%= file.id %>')
+          .writeAttribute('title', transport.responseText)
+          .down('.a-title')
+          .writeAttribute('title', transport.responseText)
+          .down('span')
+          .update(transport.responseText);
+      }
+    });
+  });
+})();
+</script>

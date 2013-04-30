@@ -1,0 +1,21 @@
+<div id="notice" class="layer" style="display: none;">
+  <% if (t.locale == 'ko') { %>
+    <h2>긴급 공지</h2>
+    <p>Velox 베타 서비스를 이용해 주시는 고객님들께 긴급히 전해드릴 내용이 있어 공지를 올립니다. 저희 서비스가 아직 개발과 서비스 용도로 분리되어 있지 않은 상황에서 전체 컨텐츠에 대한 메타데이터 마이그레이션 작업 도중 2012년 12월 12일 오후 5시경 일부 데이터의 사이즈가 0 으로 업데이트되는 사고가 발생하였습니다.</p>
+    <p>해당 시각 이후로 Velox 베타 서비스에 업로드하신 컨텐츠는 모두 정상적으로 서비스되고 있습니다만, 그 이전의 데이터에서는 유실이 발생하였을 수 있고, 유실된 데이터는 복구가 불가능하다고 판명되었습니다. 이 점에 대해 저희는 심각한 책임을 느끼고 있으며, 유실된 컨텐츠에 대해서는 조속히 리스트를 작성하여 사용하고 계신 분들께 메일로 전달하도록 하겠습니다.</p>
+    <p>다시 한번 이런 사고가 발생한 것에 죄송하다는 말씀을 드리며, 곧 개발과 서비스 시스템을 분리하여 향후 유사한 사고가 발생하지 않도록 주의하겠습니다.</p>
+    <p>감사합니다.</p>
+  <% } else if (t.locale == 'en') { %>
+    <h2>Apology to Velox beta service users:</h2>
+    <p style="font-size: 11px;">Given that our development system is currently not yet separated from the service system, we have been developing our service on the actual service system. Around 5PM on December 12, 2012, during metadata migration process, one of our developer erroneously sent metadata migration code to our service system, which resulted in some data loss, setting the size of those data to 0.</p>
+    <p style="font-size: 11px;">Since then Velox beta service has been restored and is working properly as of now. However, if you download the previously uploaded data and the data size is shown as 0, it means the data is corrupted and cannot be restored. We are very sorry for this data loss that may have occurred to your account. We are now working to make a list of the corrupted data, and will send you an email with the lost data list soon. </p>
+    <p style="font-size: 11px;">Once again, we sincerely apologize for this accident. We are now working on making a separate development system in order to avoid a similar accident happening to our service system.</p>
+  <% } else if (t.locale == 'ja') { %>
+    <h2>緊急告知</h2>
+    <p>Veloxベータサービスを利用してくださるお客様に緊急のお届け内容があり公知をあげます。私どものサービスがまだ開発とサービスの用途に分離されていない状況ですべてのコンテンツのメタデータ移行作業中2012年12月12日午後5時頃、一部のデータのサイズが0に更新される事故が発生しました。</p>
+    <p>この時刻以降にVeloxベータサービスにアップロードされたコンテンツはすべて正常にサービスされていますが、それ以前のデータでは、損失が発生したことがあり、失われたデータは復旧が不可能だと判明しました。この点について、私たちは深刻な責任を感じており、失われたコンテンツについては、早急にリストを作成して使用している方々にメールで転送するようにします。</p>
+    <p>もう一度この事故が発生したこと申し訳ないという言葉を申し上げて、すぐに開発とサービスのシステムを分離して、今後同様の事故が発生しないように注意します。</p>
+    <p>ありがとうございます。</p>
+  <% } %>
+  <button class="button"><%= t('actions.confirm') %></button>
+</div>

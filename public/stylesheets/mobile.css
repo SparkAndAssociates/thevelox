@@ -1,0 +1,95 @@
+/*!
+ * Velox - mobile.css(iOS Only)
+ * Joon Kyoung(@firejune)
+ * Copyright(c) 2013 Spark & Associates Inc.
+ * MIT Licensed
+ */
+ 
+/* layouts */
+#view-thumbs-button, #status-panel, p.version, #help, .info span,
+#managetags-button, #resettags-button { display: none; }
+article#archives-panel, article#content-panel { left: 0; bottom: 0; }
+
+.portrait.standalone #archives-panel,
+.portrait.standalone #filter-panel,
+.portrait.standalone #content-panel { bottom: 41px; }
+.portrait.standalone #status-panel,
+.portrait.standalone p.version { display: block; }
+
+div#dialog .settings .tabs { margin-bottom: -2px; }
+
+nav#header { height: 36px; }
+nav#header .logo { width: 32px; margin: -1px 10px 0; overflow: hidden; }
+menu#navigation { padding-left: 0; margin-top: 5px; }
+menu#navigation .info { margin-top: 6px; }
+header#toolbar-wrapper { top: 36px; }
+
+aside#filter-panel { left: -160px; bottom: 0; z-index: 2; width: 160px; }
+aside#filter-panel, aside#managetags-panel, article#content-panel, article#archives-panel { top: 76px; }
+
+aside#filter-panel, article#archives-panel, article#content-panel {
+/*
+	-webkit-transition: left 0.5s ease;
+	   -moz-transition: left 0.5s ease;
+	    -ms-transition: left 0.5s ease;
+	     -o-transition: left 0.5s ease;
+	        transition: left 0.5s ease;
+*/
+}
+
+#content.showtags #filter-panel { left: 0; }
+#content.showtags #content-panel,
+#content.showtags #archives-panel { left: 160px; }
+
+
+/* toolbar */
+div#toggletags-button { display: block; }
+form#quick_search.pretty { margin-right: 6px; }
+form#quick_search.pretty input { width: 86px; zoom: 1; }
+form#quick_search fieldset { width: 120px; margin-left: 0; }
+div#preview-overlay .panel-header { bottom: 25px; }
+
+div.tagtool { width: 36px; }
+div.tagtool.active {
+  background-color:#475566; border-color:#475566;
+  background-image:-webkit-linear-gradient(top, #475566, #303A44);
+  background-image:-moz-linear-gradient(top, #475566, #303A44);
+  filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=linear, StartColorstr=#475566, EndColorstr=#303A44);
+}
+div.toolbar .button { padding: 4px 6px 3px 8px; }
+div.tagtool.active .button { color: #fff; }
+
+
+/* contents */
+article.view-thumbs .box { width: 168px; margin: 10px 0 0 10px; padding: 10px; }
+article.view-thumbs .box.selected,
+article.view-thumbs .box:hover { padding: 7px; }
+article.view-thumbs .box .status-badge { margin: 0; }
+article.view-thumbs .box dl { font-size: 11px; }
+article.view-thumbs .box dt { width: 55px; }
+article.view-thumbs .box dd { width: 100px; }
+article.view-thumbs .box .status-badge { }
+article.view-list .a-details .a-title { width: 200px; }
+
+div.panel-header .close { margin-right: 10px; }
+div#dialog.editbox #user_name { width: 120px; }
+
+/* portrait */
+@media screen and (max-width: 480px) {
+  div#dialog { width: 340px; margin-left: -190px; margin-top: -150px; }
+  #send_link, #receive_link { width: 315px; }
+  article.view-thumbs ul { padding-left: 0; }
+  #dialog.editbox {width: 400px; margin-left: -220px;}
+  #author, #quick_search, .tabs li.info i,
+  #note-button, .panel-contents .preview, .panel-contents .image { display: none; }
+  menu.tabs { padding-right: 10px; }
+  div.threecolwrapper .column { width: 185px; }
+  div.panel-contents .info .block .tag { width: 113px; }
+}
+
+/* landscape */
+@media screen and (min-width: 481px) and (max-width: 720px) {
+  div#dialog { width: 520px; margin-left: -280px; margin-top: -120px; }
+  #send_link, #receive_link { width: 495px; }
+  div.threecolwrapper .column { width: 196px; }
+}

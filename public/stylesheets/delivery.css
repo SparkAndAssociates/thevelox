@@ -1,0 +1,206 @@
+/*!
+ * Velox - delivery.css
+ * Joon Kyoung(@firejune)
+ * Copyright(c) 2013 Spark & Associates Inc.
+ * MIT Licensed
+ */
+
+/* reset */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0; padding: 0; border: 0; font-size: 100%;
+  font: inherit; vertical-align: baseline;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; }
+body { line-height: 1; }
+ol, ul { list-style: none; }
+blockquote, q { quotes: none; }
+blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
+table { border-collapse: collapse; border-spacing: 0; }
+
+[class^="icon-"]:before, [class*=" icon-"]:before { margin-right: 8px; vertical-align: baseline; }
+
+html { height:100%; background:url(/images/background_linen.png) repeat #5C5B5F; }
+body {
+  font-family:Lucida Grande, Arial, Helvetica, sans-serif;
+  font-size:.7em; line-height:1.3em; margin:1.0em; padding:0; background:none
+}
+
+a { color:#666; }
+a:visited { color:#666 }
+/*a:hover { color:#fff; background-color:#888; border-radius: 8px; }*/
+h1 { font-size:1.1em; padding:0; margin:0; line-height:1em; text-align:center }
+p { margin:10px 0 20px 0; color:#666; text-align:center }
+
+/* generic.css */
+.logo h1 {font-size: 70px; color: #eee; }
+.logo a { color: #eee; text-decoration: none; }
+
+#box {
+  position:relative; width:500px; background-color:#efefef; border-radius:3px;
+  box-shadow:0 4px 32px rgba(0,0,0,0.5); margin: -298px 0 0 -250px; position: absolute; top: 50%; left: 50%;
+}
+#header { position:relative; height:150px }
+#header .logo { position:absolute; left:50%; top:50%; margin-top:-40px; margin-left:-130px; }
+#content { padding:20px; border:1px solid #ddd; border-top:none }
+#content form { padding:0 80px }
+
+.note {
+  text-align:left; margin:1em 0 1em 95px;
+  font:italic normal 1.1em/1.5em Georgia, Times, "Times New Roman", serif;
+}
+
+.version {
+  display:none; width:502px; margin-left:auto;
+  margin-right:auto; text-align:right; padding:4px; font-size:9px
+}
+.version span.copyright { display:block; float:left }
+.version span.copyright a { color:#464 }
+.version span.copyright a:hover { background:none; color:#464 }
+
+.frozen_msg { font-size:1.1em; text-align:left; padding:10px 0 0 0; margin-bottom:40px; margin-top:20px }
+.info { margin-bottom:20px; color:#222; text-align:center }
+
+body.waiting {
+  margin:0!important; padding:0!important;
+  width:100%!important; height:100%!important; overflow:hidden!important
+}
+#waiting_overlay {
+  position:absolute; opacity:.75; filter:alpha(opacity=75)
+  top:0; left:0; margin:auto; width:100%; height:100%; z-index:9999; border:0;
+  background:#000 url(/images/rotate_black.gif) no-repeat center!important;
+}
+#waiting_overlay[id] { position:fixed }
+#waiting_overlay .message {
+  position:absolute; top:50%; left:50%; margin:50px 0 0 -150px; font-size:21px; text-align:center;
+  text-transform:lowercase; color:#94c77b; width:300px; height:100px
+}
+
+#message { color:#800; text-align:center; padding:10px 0 0 0 }
+#warning a {
+  display:block; margin:0; padding:1em; margin:1em 0 0; color:#000;
+  font-weight:bold; text-decoration:none; background-color:#FEC; border-radius:7px;
+  background:#FEC url(/images/assets/i-warn-sml.gif) 8px 10px no-repeat;
+}
+#warning a:hover { background-color:#DCA }
+#warning a span { padding-left:20px }
+
+#notsupported { overflow:hidden; zoom:1 }
+#notsupported p { clear:both; text-align:left }
+#notsupported ul { margin:0 0 20px; padding:0; list-style:none; overflow:hidden; zoom:1 }
+#notsupported ul li { float:left; width:24%; height:130px; border-right:1px solid #eee }
+#notsupported li.last { border:none }
+#notsupported ul li a {
+  display:block; margin:0 auto; padding:100px 0 0; text-align:center; width:100px;
+  background:#fff url(/images/delivery/login-browsers.png) 0 0 no-repeat
+}
+#notsupported ul li a:hover { color:#000 }
+#notsupported li.browser-ff a { background-position:0 0 }
+#notsupported li.browser-safari a { background-position:-100px 0 }
+#notsupported li.browser-ie a { background-position:-200px 0 }
+#notsupported li.browser-chrome a { background-position:-300px 0 }
+
+/* shared */
+.button {
+  color:#FFF; height:34px; font-size:12px; text-decoration:none;
+  background:none; border:0; padding:0; min-width:200px
+}
+.button:hover { color:#7cacc7; cursor:pointer }
+.button.low { color:#ccc }
+.button.low:hover { color:#FFF }
+.button span { float:left; display:block; height:34px }
+.button .left { width:10px; background:url(/images/delivery/button-confirm-start.png) 0 0 no-repeat transparent }
+.button .middle {
+  padding:7px 0; padding-left:20px; padding-right:20px;
+  background:url(/images/delivery/button-confirm-middle.png) 0 0 repeat-x transparent
+}
+.button .right { width:10px; background:url(/images/delivery/button-confirm-end.png) 0 0 no-repeat transparent }
+.button.low .left { background:url(/images/delivery/button-cancel-start.png) 0 0 no-repeat transparent }
+.button.low .middle { background:url(/images/delivery/button-cancel-middle.png) 0 0 repeat-x transparent }
+.button.low .right { background:url(/images/delivery/button-cancel-end.png) 0 0 no-repeat transparent }
+
+/* sendbox */
+.sendbox #upload { position:relative; margin:0; z-index:20 }
+.sendbox #content div { overflow:hidden; zoom:1 }
+.sendbox #email_validation_error {
+  position:absolute; padding-left:20px; margin-left:5px; margin-right:25px; font-size:11px; color:red;
+  line-height:12px; margin-top:-2px; background:url(/images/delivery/delete-rot.gif) left 50% no-repeat transparent;
+}
+.sendbox #details_form { margin:0; padding:0 40px; z-index:10 }
+.sendbox #details_form input, .sendbox #details_form textarea { width:100% }
+.note { margin-left:0; font-family:inherit; color:#666; width:400px }
+.sendbox p.wrong_mail input { background:#fdc5c1 }
+.sendbox #details_form .note { padding-left:0; margin-left:0; display:block }
+
+#content h1, #content form p { text-align:left; color:#000 }
+
+.sendbox form label { font-size:14px; margin-bottom:0; padding-bottom:5px; display:block; width:100% }
+.sendbox form label span { font-size: 11px; color: #999; }
+.sendbox #confirmation_mail { font-weight: bold; }
+.sendbox #confirmation_hint { font-size:11px; padding:0 20px 0 40px; line-height:18px; height:300px }
+.sendbox #confirmation_hint h2 { font-weight: bold; text-align: center; }
+.sendbox #upload-options div { padding-bottom:0; padding-top:8px; }
+.sendbox #upload-finish-message { color:#000; font-size:14px; margin-bottom:10px; line-height:20px }
+.sendbox #upload-status { position:relative; display:inline-block; height:160px; margin-left:40px }
+.sendbox #upload-finish-functions { color:#ddd }
+.sendbox #upload-finish-functions a { color:#94c77b }
+.sendbox .uploadStatus { font-size:10px; color:#000 }
+.sendbox .progressBar, .sendbox .progressBar .background {
+  height:30px;
+  background:url(/images/delivery/upload-progress-background-white.gif) 0 0
+}
+.sendbox .progressBar .background {
+  width:0; color:#fff;
+  background:url(/images/delivery/upload-progress-white.gif) 0 0;
+}
+
+/* export */
+.export #box {
+  width: auto; margin: 0; min-width: 500px;
+  left: 80px; right: 80px; top: 40px; bottom: 40px;
+}
+.export #header .logo { left: 200px; }
+.export #header .logo h1 { text-align: left; }
+.export #meta { position: absolute; top: 20px; right: 20px; color: #fff; text-align: right; }
+.export #meta h2 { font-size: 18px; margin-bottom: 10px; }
+.export #meta p { margin: 0; text-align: right; }
+.export .assets .asset .wrapper:active { background: #EEE; }
+.export #content { padding: 0; }
+.export #scroller {
+  overflow: auto; height: auto; width: auto; background: #fff;
+}
+.export .view-list p { text-align: left; margin: 0; }
+.export #toolbar {
+  height: 40px; bottom: 0; position: absolute; width: 100%; line-height: 40px;
+}
+.export .button { display: block; float: right; width: auto; min-width: auto; margin: 4px 8px 0 0;}
+.export .button .middle { padding: 0 20px; line-height: 32px; }
+
+.export .list .thumbs ,
+.export .thumbs .list { display: none; }
+
+/* auth */
+#auth { min-height: 200px; }
+.auth #box { margin-top: -215px; }
+.auth #content { border: none; padding: 20px 60px 20px 70px; min-height: 240px; }
+.auth #content form { padding: 0; }
+.auth #content form .message { text-align: center; color: #999; margin: 10px 0 50px 0; }
+.auth #message { text-align: center; }
+
+.auth .form-section { height:35px; clear:both; }
+.auth .form-section label {
+  display:block; float:left; text-align:right;
+  color:#000; padding-top:4px; line-height:16px;
+  font-size:11pt; margin-right:14px; width: 120px;
+}
+.auth .form-section span { padding-top:4px; float:left; font-weight:bold; }
+.auth .form-section input {
+  font-size:11pt; width:180px !important; margin-bottom:5px;
+  display:block; float:left; width:140px; color:#000;
+}
+.auth .form-submit { padding-left: 80px; text-align: left; }
+.auth .form-submit button { margin-top:10px; margin-left:60px; }

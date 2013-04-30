@@ -1,0 +1,19 @@
+<div class="assets">
+  <% if (!files.length) {%>
+    <div class="message">
+      <%= t('global.no-items') %>
+      <div class="info"><%- t(['global.reset' , '<a href="#" onclick="Assets.resetTags(); return false;">' + t('actions.reset') + '</a>']) %></div>
+    </div>
+  <% } else { %>
+     <%-partial('_renderObject')%>
+  <%}%>
+</div>
+
+<% if (count > (page -1) * 100 + files.length) { %>
+	<div id="next-assets"></div>
+<% } %>
+
+<script>
+Assets.setAssetsCount(<%=count%>);
+Assets.updateMenu();
+</script>

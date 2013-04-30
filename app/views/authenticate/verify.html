@@ -1,0 +1,10 @@
+<form action="/signup" method="post" class="signup">
+
+  <p id="message" style="display:block;"><%- t('global.signup-verify') %></p>
+
+  <input type="hidden" name="invite" value="<%= invite %>" />
+  <input type="hidden" name="email" value="<%= returnValues.email %>" />
+  <input type="hidden" name="username" value="<%= returnValues.username %>" />
+  <input type="hidden" name="password" value="<%= returnValues.password %>" />
+
+</form>

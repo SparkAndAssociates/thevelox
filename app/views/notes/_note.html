@@ -1,0 +1,41 @@
+<%
+  var _id = _note && _note.id || new Date().getTime()
+    , _length = files.length
+    , _files = files.map(function(file) { return file.id || file }).join(',');
+
+%>
+<section class="notepaper <%= _note.theme %> <%= _note.rotate %>" id="note_<%= _id %>" style="top: <%= _note.top %>px; left: <%= _note.left %>px;">
+  <a class="remove hint icon-remove" <%- actionName == 'show' ? 'title="' + t('actions.close') : _note && _note.id && 'href="/notes/' + boxid + '/read/' + _id + '" title="' + t('note.confirm')|| 'title="' + t('note.cancel')%>" onclick="return Assets.removeNote(this)"></a>
+  <a class="link hint icon-link" title="<%= t(['note.focus', _length]) %>" onclick="Assets.focusAttachItems('<%= _files %>')"></a>
+
+  <figure class="quote">
+    <h5 class="handle grab"><%= _note.created && _calendar(_note.created, t.locale, session.user.timezone, true)|| 'Note Paper' %></h5>
+    <% if (actionName.match(/add|edit/)) { %>
+
+    <form action="/notes/<%= boxid %>/<%= _note && _note.id && 'update/' + _id || 'create' %>" method="post" onsubmit="return Assets.updateNote(this);">
+      <input type="hidden" name="rotate" value="<%= _note.rotate %>"/>
+      <input type="hidden" name="theme" value="<%= _note.theme %>"/>
+      <input type="hidden" name="left" value="<%= _note.left %>"/>
+      <input type="hidden" name="top" value="<%= _note.top %>"/>
+      <input type="hidden" name="files" value="<%= _files %>"/>
+      <textarea name="text"><%= _note && _note.text || files[0].name + ' ' + (files.length > 1 ? 'and ' + (files.length - 1) + ' items' : '') + ' are updated.' %> </textarea>
+      <% if (_note && _note.text) { %>
+        <button onclick="new Ajax.Request('/notes/<%= boxid %>/show/<%= _id %>', {method:'get',parameters:{left:$('note_<%= _id %>').offsetLeft,top:$('note_<%= _id %>').offsetTop},onSuccess:function(req){ $('note_<%= _id %>').replace(req.responseText); }});return false;">Cancel</button>
+      <% } %>
+      <button type="submit">Save</button>
+    </form>
+
+    <% } else { %>
+
+    <% if (_note.user.id == session.user.id) { %>
+      <a class="edit hint icon-pencil" title="<%= t('note.edit') %>" href="/notes/<%= boxid + '/edit/' + _id %>" onclick="return Assets.editNote(this)"></a>
+    <% } %>
+
+    <blockquote class="curly-quotes">
+      <%= _note.text %>
+    </blockquote>
+
+    <% } %>
+    <figcaption class="quote-by">— <%= _note.user.username || _note.user.name %></figcaption>
+  </figure>
+</section>

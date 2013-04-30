@@ -1,0 +1,18 @@
+{
+  "development": { 
+      "driver":   "mongoose"
+    , "host":     "your.mongoserver.com"
+    , "database": "velox"
+    , "username": "username"
+    , "password": "password"
+  },
+  "production": {
+      "driver":   "mongoose"
+    , "host":     "your.mongoserver.com"
+    , "database": "velox"
+    , "username": "username"
+    , "password": "password"
+  }
+}
+
+

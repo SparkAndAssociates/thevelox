@@ -1,0 +1,108 @@
+<% if (wrapper) { %>
+<div class="panel-header">
+  <div class="title icon-share-alt"><%= t('share.title') %></div>
+  <div class="close" onclick="Velox.hidePanels()"><%= t('actions.close-panel') %></div> 
+</div>
+
+<div class="panel-contents" id="share-panel-content">  
+<% } %>
+
+  <div class="preview">
+    <span class="assets-badge"><%= files.length %></span>
+    <div class="matrix-preview">
+
+      <%
+        var file, prop, len, i, size = 0;
+        for (i = 0, len = files.length; i < len; i++) {
+          file = files[i];
+          prop = _file(file, params.box);
+          size += file.size;
+          if (i > 8) continue;
+      %>
+
+      <span class="<%= (files.length == 1 ? 'thumb-big ' : ' ') + prop.thumb %>">
+        <img src="<%= prop.rel %>" title="<%=file.name%>" <%- prop.preview ? 'onclick="Assets.preview(\'' + file.id + '\', false)"' : '' %>/>
+      </span>
+
+      <%
+        }
+      %>
+    </div>
+
+    <p class="panel-hint">
+      <%- t(['share.hint', '<strong>' + files.length + ' ' +  (files.length == 1 ? t('global.item') : t('global.items')) + '</strong>']) %>
+      <%= t('share.total') %> <strong><%= _size(size) %></strong>. 
+    </p>
+  </div>
+
+  <div class="threecolwrapper">
+    <form action="/delivery/<%=params.box%>/create_link" id="share_form" method="post" onsubmit="return Assets.createShareLink(this)">
+      <input name="ids" type="hidden" value="<%= ids %>" />
+      <input name="notify" type="hidden" value="0" id="notify_link"  />
+      <input name="remove" type="hidden" value="0" id="remove_link" />
+
+      <div class="column">
+        <fieldset>
+          <label for="subject"><%= t('share.subject') %> <span><%= t('global.required') %></span></label>
+          <input class="text-input" id="subject" name="subject" type="text" value="<%= external.subject || files.length == 1 ? '1 ' + t('global.item') : files.length + ' ' + t('global.items') %> " />
+        </fieldset>
+        <fieldset>
+          <label for="message"><%= t('share.message') %></label>
+          <textarea cols="40" id="message" name="message" rows="8"></textarea>
+        </fieldset>
+      </div>
+
+      <div class="column">
+        <fieldset>
+          <label for="expire"><%= t('share.expire') %></label>
+          <select name="expire">
+            <option value="-1"><%= t('share.never') %></option>
+            <option value="24" <%= external.expire == 24 ? 'selected="selected"' : '' %>><%= t('share.day') %></option>
+            <option value="168" <%= external.expire == 168 ? 'selected="selected"' : '' %>><%= t('share.week') %></option>
+          </select>
+          <%
+          
+          if (external.status == 2 || external.expire && new Date(external.created.getTime() + 1000 * 60 * 60 * external.expire) < new Date) {
+          %>
+          <span style="color: red">Expired</span>
+          <%
+          }
+          %>
+          
+        </fieldset>
+
+        <fieldset>
+          <label for="password"><%= t('share.password') %> <span><%= t('global.optional') %></span></label>
+          <input class="text-input" id="password" name="password" type="password" value="<%= external.password || '' %>" placeholder="<%= t('share.password-hint') %>" />
+        </fieldset>
+
+        <fieldset>
+          <label for="recipient"><%= t('share.recipient') %> <span><%= t('global.optional') %></span></label>
+          <input class="text-input" id="recipient" name="recipient" type="text" value="<%= external.recipient && external.recipient.join(', ') || '' %>" placeholder="<%= t('share.recipient-hint') %>" />
+          <p class="panel-hint" style="margin: 0;"><%= t('share.recipient-desc') %></p>
+        </fieldset>
+      </div>
+
+      <div class="column">
+        <fieldset class="actions">
+          <% if (external.status) { %>
+            <button class="button" onclick="$('remove_link').value = 1"><%= t('actions.remove') %></button>
+            <button class="button"><%= t('actions.update') %></button>
+            <a style="margin-left: 6px;" href="/delivery/<%= _encode64(external.id) %>" target="_blank"><%= t('actions.open') %></a>
+          <% } else { %>
+            <button class="button"><%= t('actions.create') %></button>
+          <% } %>
+        </fieldset>
+      </div>
+
+    </form>
+  </div>
+  
+<% if (wrapper) { %>
+</div>
+<% } %>
+
+<script type="text/javascript" charset="utf-8">
+  //$('subject').activate();
+  //placeholderShiv('share_form');
+</script>

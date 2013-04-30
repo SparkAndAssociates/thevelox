@@ -1,0 +1,120 @@
+<form action="/signup" onsubmit="return userSignin(this)" method="post" class="signup">
+
+  <p id="message" style="display:block;"><%- error.length > 0 && error || '' %></p>
+
+  <input type="hidden" name="invite" id="invite" value="<%= returnValues.invite || invite %>" />
+
+  <div class="form-section login">
+    <label for="name"><%= t('user.name') %></label>
+    <input type="text" name="name" id="name" placeholder="<%= t('user.name-ex') %>" size="30" value="<%= returnValues.name || '' %>" />
+  </div>
+
+  <div class="form-section login">
+    <label for="email"><%= t('user.email') %></label>
+    <input type="text" name="email" id="email" placeholder="<%= t('user.email-ex') %>" size="30" value="<%= returnValues.email || '' %>" />
+  </div>
+  
+  <div class="form-section login">
+    <label for="username"><%= t('user.username') %></label>
+    <input type="text" name="username" id="username" placeholder="<%= t('user.username-ex') %>" size="30" value="<%= returnValues.username || '' %>" />
+  </div>
+
+  <div class="form-section login">
+    <label for="password"><%= t('user.password') %></label>
+    <input type="password" name="password" id="password" placeholder="<%= t('user.password-ex') %>" size="30" value="<%= returnValues.password || '' %>" />
+  </div>
+
+  <div class="form-submit login" style="margin-top: 20px">
+    <input type="submit" value="<%= t('global.signup') %>" />
+  </div>
+
+  <p style="margin-top: 10px">
+    <a href="/"><%= t('global.signup-cancel') %></a>
+  </p>
+</form>
+
+<div id="welcome" class="layer" style="display: none;">
+  <% if (t.locale == 'ko') { %>
+    <h2>환영합니다!</h2>
+    <p>Velox는 널리 알려진 "Dropbox"와 유사한 개념의 클라우드 스토리지의 클라이언트 서비스로서, 다수의 참여자들이 손쉽게 파일을 공유하고 효과적으로 협업할 수 있도록 설계되었습니다. 이 프로젝트는 Node.js, MongoDB로 구축하였으며, 클라우드 스토리지로는 Swift를 사용하고 있습니다.</p>
+    <p>아직 베타 서비스 단계이므로 일부 기능이 불안정하게 작동하거나, 예상치 못한 오류로 인해 데이터 손실이 발생할 수 있습니다. 현재 안정화 작업을 진행 중이지만 중요한 자료는 꼭 다른 곳에 백업을 해두시길 바랍니다.</p>
+    <p>사용상 문의할 점이나 서비스 개선에 대한 건의 사항이 있으시면, <a href="mailto:velox-help@sparkandassociates.com">velox-help@sparkandassociates.com</a>로 언제든지 알려주시길 부탁드립니다.</p>
+    <p>감사합니다.</p>
+  <% } else if (t.locale == 'en') { %>
+    <h2>Welcome!</h2>
+    <p>Enjoy. Plz backup.</p>
+    <p>Thank you.</p>
+  <% } else if (t.locale == 'ja') { %>
+  <h2>ようこそ！</h2>
+    <p>Veloxは広く知られている"Dropbox"と類似した概念のクラウドストレージのクライアントサービスとして、多数の参加者が簡単にファイルを共有して効率的に行うように設計されました。このプロジェクトは、Node.js、MongoDBに構築し、クラウドストレージには、Swiftを使用しています。</p>
+    <p>まだベータサービスの段階なので、一部の機能が不安定になったり、予期せぬエラーが原因で、データの損失が発生することがあります。現在の安定化作業を進めているが、重要なデータは必ず別の場所にバックアップをしておい望みます。</p>
+    <p>使用上お問い合わせする点やサービス改善のための提案がありましたら、<a href="mailto:velox-help@sparkandassociates.com"> velox-help@sparkandassociates.com</ a>でいつでもお知らせくださいますようお願いいたします。</p>
+    <p>ありがとうございます。</p>
+  <% } %>
+  <button class="button"><%= t('actions.confirm') %></button>
+</div>
+
+<script>
+  function userSignin(form) {
+    var error = null;
+
+    $$('.error').invoke('removeClassName', 'error');
+
+    if (!/^[A-Za-z0-9!@#$%^&*()_]{5,20}$/.test(form.password.value))
+      error = {message: "<%= t('user.password-error') %>", field: form.password};
+    if (form.password.value.length < 5 || form.password.value.length > 20)
+      error = {message: "<%= t('user.password-limit') %>", field: form.password};
+    if (!form.password.value.strip())
+      error = {message: "<%= t('user.password-empty') %>", field: form.password};
+
+    if (!/^[A-Za-z0-9_]{4,20}$/.test(form.username.value))
+      error = {message: "<%= t('user.username-error') %>", field: form.username};
+    if (form.username.value.length < 4 || form.username.value.length > 20)
+      error = {message: "<%= t('user.username-limit') %>", field: form.username};
+    if (!form.username.value.strip())
+      error = {message: "<%= t('user.username-empty') %>", field: form.username};
+
+    if (!/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i.test(form.email.value))
+      error = {message: "<%= t('user.email-error') %>", field: form.email};
+    if (!form.email.value.strip())
+      error = {message: "<%= t('user.email-empty') %>", field: form.email};
+
+    if (!/^[A-Za-z0-9가-힣 ]{3,20}$/.test(form.name.value))
+      error = {message: "<%= t('user.name-error') %>", field: form.name};
+    if (form.name.value.length < 3 || form.name.value.length > 20)
+      error = {message: "<%= t('user.name-limit') %>", field: form.name};
+    if (!form.name.value.strip())
+      error = {message: "<%= t('user.name-empty') %>", field: form.name};
+
+    if (error) {
+      $('message').innerHTML = error.message;
+      $('message').style.display = "block";
+      Effect.Shake('box');
+      $(error.field).activate().addClassName('error');
+      return false;
+    }
+
+    if (window.showWelcome) {
+      showWelcome(form);
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  function showWelcome(form) {
+    $('welcome').show().down('button').activate().observe('click', function() {
+      form.submit();
+    });
+  }
+
+  var loginFailure = <%= error.length > 0? 1: 0 %>;
+  if (loginFailure) {
+    Event.observe(window, 'load', function() {
+      Effect.Shake('box');
+    });
+  }
+
+  if ($('name') && !Prototype.Browser.IE && !Modernizr.touch) Field.focus('name');
+  placeholderShiv();
+</script>

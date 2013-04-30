@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xml:lang="en-US">
+  <id>thevelox.com/files/<%= file.box %>/download/<%= file.id %></id>
+  <link type="text/html" rel="alternate" href="https://github.com/SparkAndAssociates/velox/commits/master"/>
+  <link type="application/atom+xml" rel="self" href="https://github.com/SparkAndAssociates/velox/commits/master.atom"/>
+  <title>Recent History to <%= file.name %></title>
+  <updated><%= file.lastModifyDate.toISOString() %></updated>
+
+  <%
+
+  if (histories.length) {
+    histories.forEach(function(log) {
+
+      // Migration
+      if (!log.how) {
+        log.how = log.what;
+        if (log.args) log.what = log.args;
+        else if (log.how.match(/createlink|updatelink|multiplelink|downloadlink|edit/)) log.what = {};
+        else log.what = 'Unknown';
+      }
+
+      // FIXME
+      if (log.how.match(/createlink|updatelink|multiplelink|downloadlink/) && !log.what) {
+        console.log('FIXME: wrong log data - ' + log.how);
+        log.what = {};
+      }
+
+      var replaces = [];
+      if (log.how.match(/createnote|readnote|updatenote/))
+        replaces.push('<a href="/notes/' + params.box + '/show/' + log.what.id + '" onclick="return Assets.showNote(this, \'' + log.what.id + '\')">' + t('histories.notepaper') + '</a>');
+      if (log.how.match(/copyto|copyfrom/))
+        replaces.push(log.where.name == 'Items' ? t('histories.privatebox') : '<a href="/assets/' + log.where.id + '">' + log.where.name + '</a>');
+      if (log.how.match(/assigntag|unassigntag/))
+        replaces.push(log.what);
+      if (log.how == 'edit')
+        replaces = [log.what.field && t('edit.' + log.what.field) || 'unknown', log.what.from || 'unknown', log.what.to || 'unknown'];
+      if (log.how == 'revision')
+        replaces.push(log.what);
+      if (log.how.match(/createlink|updatelink|multiplelink|downloadlink|accesslink/)) {
+        replaces.push('<a href="/delivery/' + log.what.id + '">' + (log.what.subject || t('histories.sharelink')) + '</a>');
+      }
+
+      replaces = replaces.concat([_when(log.when, t.locale), log.who.name || log.who.email || log.who.ip]);
+    %>
+    <entry>
+      <id><%= log.id %></id>
+      <link type="text/html" rel="alternate" href="https://thevelox.com/assets/<%= params.box %>/download/<%= params.id %>"/>
+      <title><%= log.type || 'Log' %></title>
+      <updated><%= log.when.toISOString() %></updated>
+      <author>
+        <name><%= log.who.name %></name>
+        <uri>https://thevelox.com/assets/<%= params.box %></uri>
+      </author>
+      <content type="html">
+        <%- t(['histories.' + log.how].concat(replaces)) %>
+      </content>
+    </entry>
+  <%
+
+    });
+
+  }
+
+  %>
+
+</feed>

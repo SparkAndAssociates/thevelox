@@ -1,0 +1,30 @@
+<div id="dialog" class="sharelink">
+  <h3 class="icon-link"><%= t('share.title-created') %></h3>
+
+  <div class="dialog-content">
+    <p style="margin-top: 10px; font-szie: 13px;"><%= t('share.description') %> <%= share.expire ? t(['share.expire-desc', share.expire]) : '' %></p>
+  
+    <p style="margin-top: 10px;">
+      <input id="send_link" type="text" readonly="readonly" value="/delivery/<%= _encode64(id) %>"/>
+    </p>
+  
+    <p style="margin-top: 10px;" class="panel-hint">
+      <%= t('receive.status') %>:
+      <code class="badge"><%= share.status ? t('receive.opened') : t('receive.closed') %></code>
+      <code class="badge"><%= share.password || share.recipient && share.recipient.length ? t('receive.protected') : t('receive.published') %></code>
+    </p>
+  
+    <fieldset class="actions">
+      <button class="button" id="shorten" onclick="Velox.shortenURL(this, 'send_link')"><%= t('actions.shorten') %></button>
+      <!--button class="button"><%= t('actions.clipboard') %></button-->
+      <button class="button" onclick="window.open($('send_link').value)"><%= t('actions.open') %></button>
+      <button class="button" id="cancel" onclick="Velox.hideDialog(event)"><%= t('actions.close') %></button>
+    </fieldset>
+
+  </div>
+</div>
+
+<script>
+  $('send_link').value = location.protocol + '//' + location.host + $('send_link').value;
+  $('send_link').activate();
+</script>

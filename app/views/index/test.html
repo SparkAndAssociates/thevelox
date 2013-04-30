@@ -1,0 +1,65 @@
+<div id="dialog" style="margin-top: -270px">
+  <h3>URL Crash Test Suite</h3>
+  <div class="dialog-content" style="height: 400px; overflow: auto; font-size: 1.2em; padding-left: 10px;" id="test-suite">
+  <ul>
+  <%
+    var testKey = 'test';
+    routes.forEach(function(obj) {
+      if (obj.path.match(/signout|railway/) || obj.path[0] != '/') return;
+      %>
+      <li><%= obj.method + ' ' + obj.path.replace(/:[^\/]+/g, testKey) %></li>
+      <%
+    });
+  %>
+  </ul>
+  </div>
+
+  <fieldset class="actions">
+    <button class="button ok" onclick="Velox.runTest()">Run</button>
+    <button class="button" onclick="Velox.showDialog('/icons')">Icons</button>
+    <button class="button" id="cancel" onclick="Velox.hideDialog(event)"><%= t('actions.close') %></button>
+  </fieldset>
+</div>
+
+<script>
+Velox.runTest = function() {
+  var suite = $('test-suite')
+    , queue = []
+    , index = 0;
+
+  function test() {
+    var set = queue.pop()
+      , el = set[2]
+      , url = set[1]
+      , method = set[0];
+
+    new Ajax.Request(url, {
+      method: method,
+      evalScripts: false,
+      onSuccess: function(req) {
+        el.insert('<strong style="color:' + (!req.status ? 'red' : 'green') + '"><a id="_' + index + '"> ... </a>' + req.status + ' ' + req.statusText + '</strong>');
+      },
+      onFailure: function(req) {
+        el.insert('<strong style="color:' + (req.status == 500 ? 'red' : 'blue') + '"><a id="_' + index + '"> ... </a>' + req.status + ' ' + req.statusText + '</strong>');
+      },
+      onComplete: function() {
+        suite.scrollTop = $('_' + index).offsetTop - suite.offsetHeight;
+        queue.length && setTimeout(function() {
+          test();
+        }, 100); 
+      }
+    });
+
+    index++;
+  }
+
+  suite.select('li').each(function(el) {
+    var strong = el.down('strong')
+    strong && strong.remove();
+    queue.push(el.innerHTML.split(' ').concat([el]));
+  });
+
+  queue.reverse();
+  test();
+};
+</script>

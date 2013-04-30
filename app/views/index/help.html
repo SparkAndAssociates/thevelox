@@ -1,0 +1,18 @@
+<div id="dialog" class="help">
+  <h3 class="icon-question-sign"><%= t('global.no-tiems') %><%= t('global.help') %></h3>
+
+  <div class="dialog-content">
+    <aside class="sidebar">
+      <nav>
+        <%- index %>
+    </aside>
+  
+    <div class="content">
+      <%- content %>
+    </div>
+  
+    <fieldset class="actions">
+      <button class="button" id="cancel" onclick="Velox.hideDialog(event)"><%= t('actions.close') %></button>
+    </fieldset>
+  </div>
+</div>

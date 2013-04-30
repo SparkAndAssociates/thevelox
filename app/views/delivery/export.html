@@ -1,0 +1,84 @@
+<section id="meta">
+  <h2><%= share.subject || 'No Title'%></h2>
+  <p><%= t('delivery.total') %> <%= files.length %></p>
+  <p><%= share.message || '' %></p>
+</section>
+
+<section id="scroller" class="view-thumbs">
+  <div id="assets" class="assets grid5">
+    <%
+      files.forEach(function(file) {
+        var _prop = _file(file, share.id, false, 'delivery');
+    %>
+      <div class="asset <%= _prop.asset %>" id="item_<%= file.id %>" title="<%= file.name %> (v.<%= _prop.ver %>)">
+        <div class="wrapper">
+          <p class="a-thumb <%= _prop.thumb %>">
+            <img src="<%= _prop.rel %>" alt="" style="<%= _prop.style %>" />
+          </p>
+    
+          <p class="a-details">
+            <b class="a-title" title="<%= file.name %>"><span><%= _sanitize(file.name).entityEncode() %></span></b>
+            <b class="a-type type-<%= file.ext %>" <%- file.scribd && file.scribd.id ? 'id="' + file.scribd.id + '" data-key="' + file.scribd.key + '"' : ''%>><%= file.ext %></b>
+            <a href="#" title="Show available versions" class="version ver-<%= _prop.ver %>"><%= _prop.ver %></a>
+            <b class="a-size"><%= _size(file.size) %></b>
+            <b class="a-uploaded"><%= _when(file.uploadDate, t.locale) %></b>
+            <b class="a-author"><%= _name(file) %></b>
+            <b class="a-date"><%= _format(file.uploadDate, t.locale) %></b>
+          </p>
+        </div>
+      </div>
+  
+    <% }); %>
+  </div> 
+</section>
+
+<div id="toolbar">
+  <a href="/delivery/<%= share.id %>/downloadall" class='button'><span class='left'></span><span class='middle'><%= t('delivery.download-all') %></span><span class='right'></span></a>
+  <a href="#" id="toggle-list" class='button thumbs'><span class='left'></span><span class='middle'><b class="list"><%= t('delivery.view-thumbs') %></b><b class="thumbs"><%= t('delivery.view-list') %></b></span><span class='right'></span></a>
+</div>
+
+
+<script>
+(function() {
+  var box = $('box')
+    , assets = $('assets')
+    , scroller = $('scroller')
+    , toggleList = $('toggle-list');
+
+  function resize() {
+    var headerHeight = 150
+      , viewportWidth = box.getWidth()
+      , viewportHeight = document.viewport.getHeight();
+
+    var size = 5 * 10.3 * 2 + 10;
+    var grid = (viewportWidth / (size + 15)) >> 0;
+
+    assets.className = "assets grid" + (grid > 20 ? 20 : grid);
+    scroller.style.height = viewportHeight - 120 - headerHeight + 'px';
+  }
+
+  Event.observe(window, 'resize', resize);
+
+  toggleList.observe('click', function(event) {
+    event.stop();
+    var mode = toggleList.hasClassName('thumbs') ? 'list' : 'thumbs';
+    scroller.className = 'view-' + mode;
+    toggleList.className = 'button ' + mode;
+  });
+
+  assets.delegate(".wrapper", "click", function(event) {
+    event.stop();
+    var typeEl = this.down('.a-type')
+      , docId = typeEl.id
+      , docKey = typeEl.readAttribute('data-key');
+
+    // for demo
+    if (docId) location.href = 'http://www.scribd.com/fullscreen/' + docId + '?access_key=' + docKey;
+    else location.href = '/delivery/<%= share.id %>/download/' + this.up().id.split('_')[1];
+  });
+
+  resize();
+
+})();
+</script>
+

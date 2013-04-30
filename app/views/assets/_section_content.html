@@ -1,0 +1,18 @@
+  <section id="edit-panel" class="inline-panel" style="display:none;"> </section>
+  <section id="tags-panel" class="inline-panel" style="display:none;"> </section>
+  <section id="share-panel" class="inline-panel" style="display:none;"> </section>
+
+  <section class="main-panel-wrapper">
+    <div id="main-panel" class="main-panel">
+      <div class="assets-container-wrapper">
+        <div id="assets-container">
+          <!-- Assets will be pushed here -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Actions form -->
+  <form action="/files/<%=project.id%>/download" id="download-form" method="post" accept-charset="utf-8">
+    <input type="hidden" name="ids" value="" />
+  </form>

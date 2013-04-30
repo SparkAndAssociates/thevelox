@@ -1,0 +1,30 @@
+$('search').value = '<%= session.user.search[params.box] ? session.user.search[params.box] : "" %>';
+$('usage-info').update("<%= !size ? t('global.exceeded') : _size(size) + ' ' + t('global.available') %>")["<%= !size ? 'addClassName' : 'removeClassName' %>"]('exceeded');
+
+Assets.setAssetsCount(0);
+Assets.mainPanel.addClassName('loading');
+Assets.assetsList.update("<div id=\"next-assets\"></div>");
+Assets.resetAssets();
+AssetsLoader.initialize();
+
+Velox.hidePanels();
+Velox.resize();
+
+Velox.pageTracker('/assets/<%= params.box %>/refresh');
+
+Assets.toggleTrash(<%= autotags.indexOf('deleted') != -1 %>);
+$$('.active-autotag').invoke('removeClassName', 'active-autotag').invoke('addClassName', 'autotag');
+
+<% autotags.forEach(function(autotag) { %>
+Element.writeAttribute("autotag_<%= autotag %>", "class", "active-autotag");
+<% });%>
+
+$$('.active-tag').invoke('writeAttribute', 'class', 'tag');
+<% usertags.forEach(function(usertag) { %>
+$("tag_<%= usertag %>").writeAttribute("class", "active-tag");
+<% });%>
+
+$$('#document_tags > div').invoke('addClassName', 'disable');
+<% usedTags.forEach(function(usertag) { %>
+Element.removeClassName("tag_<%= usertag %>", "disable");
+<% });%>

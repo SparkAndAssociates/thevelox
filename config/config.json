@@ -1,0 +1,37 @@
+{
+  "port": 3000,
+  "secure": false,
+  "secret": "secretT",
+
+  "socket": {
+    "host": "your.websocketserver.com",
+    "port": 3000
+  },
+
+  "redis": {
+    "host": "your.redisserver.com",
+    "port": 3000
+  },
+
+  "keystone": {
+    "host": "https://your.keystonehost.com/v2.0",
+    "tenantId": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  },
+
+  "email": {
+    "from": "Velox<noreply@thevelox.com>",
+    "server": {
+      "user": "your@emailaddress.com", 
+      "password": "password", 
+      "host": "smtp.email.com", 
+      "ssl": true
+    }
+  },
+
+  "trackCode": "UA-XXXXXXXX-X",
+
+  "bitly": {
+    "user": "username",
+    "key": "X_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+  }
+}

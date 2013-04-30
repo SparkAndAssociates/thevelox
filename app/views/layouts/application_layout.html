@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="<%=t.locale%>"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="<%=t.locale%>"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="<%=t.locale%>"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="<%=t.locale%>"> <!--<![endif]-->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="<%=t.locale%>" />
+  <meta http-equiv="imagetoolbar" content="no" />  
+
+  <meta name="viewport" content="width=1024, user-scalable=0">
+  <meta name="apple-mobile-web-app-capable" content="yes">  
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta http-equiv="X-UA-Compatible" content="IE=9;"> 
+
+  <title><%= t('global.title') %> - <%= session.user.name %> &gt; <%= selected.name || t('boxes.title') %></title>
+
+  <link rel="apple-touch-startup-image" href="/apple-touch-startup-image.png">
+  <link href="/stylesheets/velox.css?v=<%= app.version %>" media="all" rel="stylesheet" type="text/css" />
+  <link href="/stylesheets/assets.css?v=<%= app.version %>" media="all" rel="stylesheet" type="text/css" />
+  <link href="/stylesheets/mobile.css" media="only screen and (min-device-width : 320px) and (max-device-width : 480px)" rel="stylesheet" type="text/css" />
+  <link href="/stylesheets/themes/<%= session.user.settings.theme || 'graphite' %>.css?v=<%= app.version %>" media="all" rel="stylesheet" type="text/css" />
+  <link href="/stylesheets/font-awesome.css?v=<%= app.version %>" media="all" rel="stylesheet" type="text/css" />
+
+  <style>
+  /* branding */
+  #header, #logo-preview {
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#000000), to(#32302E));
+    background-image: -moz-linear-gradient(top, #000000, #32302E);
+    filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=linear, StartColorstr=#000000, EndColorstr=#32302E);
+    background-color: #000000;
+  }
+  </style>
+
+  <!--[if lt IE 9]><script src="/javascripts/vendor/html5shiv.js?v=<%=app.version%>"></script><![endif]-->
+  <% if (app.settings.env == 'development') { %>
+  <script src="/javascripts/vendor/socket.io.js?v=<%=app.version%>"></script>
+  <script src="/javascripts/vendor/prototype.js?v=<%= app.version %>"></script>
+  <script src="/javascripts/vendor/effects.js?v=<%= app.version %>"></script>
+  <script src="/javascripts/vendor/dragdrop.js?v=<%= app.version %>"></script>
+  <script src="/javascripts/vendor/controls.js?v=<%= app.version %>"></script>
+  <script src="/javascripts/vendor/iscroll.js?v=<%= app.version %>"></script>
+  <script src="/javascripts/vendor/scribd.js?v=<%= app.version %>"></script>
+  <script src="/javascripts/extensions.js?v=<%= app.version %>"></script>
+  <script src="/javascripts/velox.js?v=<%= app.version %>"></script>
+  <% } else { %>
+  <script src="/javascripts/vendor/prototype.min.js?v=<%= app.version %>"></script>
+  <script src="/javascripts/dist/libraries.js?v=<%= app.version %>"></script>
+  <script src="/javascripts/dist/application.js?v=<%= app.version %>"></script>
+  <% } %>
+
+  <script>
+   <% if (app.settings.env != 'development') { %>(function(b,a){b.console={log:a,info:a,warn:a,error:a}})(window,function(){}); <% } %>
+   /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) && (function(win, doc) {
+     function orientationChange () {
+        var orient = (win.innerWidth < win.innerHeight) ? "portrait" : "landscape"
+          , pw = 410
+          , lw = 615
+          , width = orient == 'portrait' ? pw : lw
+          , scale = orient == 'portrait' ? screen.width / pw : screen.height / lw;
+
+        doc.body
+          .removeClassName('portrait')
+          .removeClassName('landscape')
+          .addClassName(orient);
+
+        $$('meta[name="viewport"]')[0].writeAttribute('content', 'width=' + width + ', minimum-scale=' + scale + ', user-scalable=0');
+        win.scrollTo(0, 1);
+      }
+  
+      setTimeout(function() {
+        orientationChange();
+        doc.body.observe('orientationchange', orientationChange);
+        if (win.navigator.standalone) doc.body.addClassName('standalone');
+      }, 0);
+    })(this, this.document);
+  </script>
+</head>
+
+<body>
+
+<nav id="header">
+  <h1 class="logo icon-cloud"><%= t('global.title') %></h1>
+  <menu id="navigation" class="tabs">
+    <%-partial('_renderBox')%>
+    <li class="tab archive"><a href="/boxes" class="no-pad hint icon-share <%= controllerName == 'boxes' ? 'active' : '' %>" title="<%= t('boxes.title') %>"></a></li>
+    <li class="info">
+      <i class="icon-user" <%- app.settings.env == 'development' && ' hint" title="DevTools" onclick="Velox.showDialog(\'/test\')"' || '' %>></i>
+      <a id="author" class="hint" href="/settings" onclick="return Velox.showDialog(this.href)" title="<%= t('global.settings') %>"><%= _name(session.user, session.user.dispname) %></a>
+      <span>|</span> <a href="/signout"><%= t('global.signout') %></a>
+      <span>|</span> <a id="help" href="/help" onclick="return Velox.showDialog(this.href)"><%= t('global.help') %></a>
+    </li>
+  </menu>
+</nav>
+
+<section id="content">
+  <%- body %>
+
+  <footer id="status-panel" class="status">
+    <p class="version">v<%= app.version %></p>
+    <div id="busy" style="display: none"><%= t('global.loading') %></div>
+    <span id="assets-info"><span id="selection-info"> </span> — <span id="usage-info"> </span><span id="users-info"> </span></span>
+  </footer>
+</section>
+
+<section id="preview-overlay" class="overlay-panel" style="display:none;"></section>
+
+<script>
+
+  Position.includeScrollOffsets = true;
+  Event.observe(window, 'resize', Velox.resize.bind(Velox));
+  Event.observe(window, "keydown", Event.observeShortcut);
+
+  document.observe("dom:loaded", function() {
+    try {
+      document.execCommand("BackgroundImageCache", false, true);
+    } catch(a) {}
+
+    if (typeof doSearch != 'undefined') {
+      Velox.initQuickSearch('search', doSearch);
+      new Form.Element.DelayedObserver('search', 1, doSearch);
+    }
+
+    var secure = location.protocol == 'https:'
+      , socket = io.connect(location.protocol + '//' + '<%=app.config.socket.host %>' + (secure ? '' : ':<%=app.config.socket.port %>'), {secure: secure});
+
+    Velox.initSocket(socket, {
+      sessionId: "<%=session.user.id %>",
+      boxId: "<%=selected.id || ''%>"
+    });
+
+    Velox.modal = $('preview-overlay');
+    Velox.trackCode = '<%= app.config.trackCode %>';
+
+    // 모바일 브라우저 이면서 overflow-scrolling 속성이 없을 때
+    if (Modernizr.touch && typeof($(document.body).style["-webkit-overflow-scrolling"]) === 'undefined' && window.iScroll) {
+      Velox.iscroll = new iScroll('main-panel');
+      new iScroll('filter-panel');
+    }
+
+    //Velox.resize();
+    !Modernizr.touch && new Tooltip('.hint, #toolbar-container .button');
+    !Modernizr.touch && Velox.registerResizeCallback(Velox.resizeTabs.bind(Velox));
+  });
+
+  var _gaq = _gaq || []
+    , pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+
+  _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+  _gaq.push(['_setAccount', '<%= app.trackCode %>']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+
+</body>
+</html>

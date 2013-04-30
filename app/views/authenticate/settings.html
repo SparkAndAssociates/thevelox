@@ -1,0 +1,312 @@
+<div id="dialog" class="preferences">
+  <h3 class="icon-cog"><%= t('settings.title') %></h3>
+
+  <form action="/settings" class="settings" method="post" onsubmit="return Velox.saveSettings(this);">
+    <!--
+    <div class="note icon-info-sign">Settings will be available soon on this page.</div>
+    -->
+
+    <ul class="tabs" id="settings_tabs">
+      <li><a class="icon-user active" id="nav_general"><span><%= t('settings.general') %></span></a></li>
+      <li><a class="icon-envelope-alt" id="nav_notifications"><span><%= t('settings.notifications') %></span></a></li>
+      <li><a class="icon-gift" id="nav_themes"><span><%= t('settings.themes') %></span></a></li>
+      <li><a class="icon-wrench" id="nav_advanced"><span><%= t('settings.advanced') %></span></a></li>
+    </ul>
+
+    <fieldset class="tab column" id="tab_general">
+      <p>
+        <label for="account_username"><%= t('settings.username') %></label>
+        <input class="text-input" id="account_username" name="account[username]" type="text" disabled="disabled" value="<%= user.name || '' %>" />
+      </p>
+
+      <p>
+        <label for="account_password" id="account_password_label"><%= t('settings.password') %></label>
+        <input class="text-input" id="account_password" name="account[password]" type="password" placeholder="<%= t('settings.password-current') %>" value="" />
+      </p>
+
+      <p>
+        <label for="account_newpassword" id="account_password_error" style="height: 50px; padding: 0;"><span class="error" style="line-height: 1;"></span></label>
+        <input class="text-input" id="account_newpassword" name="account[newpassword]" type="password" placeholder="<%= t('settings.password-new') %>" value="" /><br/>
+        <input class="text-input" id="account_renewpassword" name="account[renewpassword]" type="password" placeholder="<%= t('settings.paswoord-confirm') %>" value="" />
+      </p>
+
+      <p>
+        <label for="account_email"><%= t('settings.email') %></label>
+        <input class="text-input" id="account_email" name="account[email]" type="text" value="<%= user.email || '' %>" />
+      </p>
+
+      <p>
+        <label for="account_name"><%= t('settings.name') %></label>
+        <input class="text-input" id="account_name" name="account[name]" type="text" value="<%= user.username ||''%>" />
+      </p>
+      
+      <p>
+        <label for="account_language"><%= t('settings.language') %></label>
+        <select id="account_language" name="account[language]">
+          <option value="en-US" <%= t.locale  == 'en' ? 'selected="selected"' : '' %>>English</option>
+          <option value="ja-JP" <%= t.locale  == 'ja' ? 'selected="selected"' : '' %>>日本語</option>
+          <option value="ko-KR" <%= t.locale  == 'ko' ? 'selected="selected"' : '' %>>한국어</option>
+        </select>
+      </p>
+    </fieldset>
+
+    
+    <fieldset class="tab" style="display: none;" id="tab_notifications">
+      <p class="panel-hint"><%= t('settings.notify-hint') %></p>
+      <p>
+        <input id="notifications_nospace" name="notifications[nospace]" type="checkbox" <%= user.notifications.nospace == undefined || user.notifications.nospace ? 'checked="checked"' : '' %> class="checkbox"/> 
+        <label for="notifications_nospace"><%= t('settings.notify-nospace') %></label>
+      </p>
+      <p>
+        <input id="notifications_invited" name="notifications[invited]" type="checkbox" <%= user.notifications.nospace == undefined || user.notifications.invited ? 'checked="checked"' : '' %> class="checkbox"/> 
+        <label for="notifications_invited"><%= t('settings.notify-invited') %></label>
+      </p>
+
+      <p>
+        <input id="notifications_received" name="notifications[received]" type="checkbox" <%= user.notifications.nospace == undefined || user.notifications.received ? 'checked="checked"' : '' %> class="checkbox"/>
+        <label for="notifications_received"><%= t('settings.notify-received') %></label>
+      </p>
+
+      <p>
+        <input id="notifications_shared" name="notifications[sent]" type="checkbox" <%= user.notifications.sent ? 'checked="checked"' : '' %> class="checkbox"/>
+        <label for="notifications_shared"><%= t('settings.notify-shared') %></label>
+      </p>
+
+      <p>
+        <input id="notifications_expired" name="notifications[expired]" type="checkbox" <%= user.notifications.expired ? 'checked="checked"' : '' %> class="checkbox"/> 
+        <label for="notifications_expired"><%= t('settings.notify-expired') %></label>
+      </p>
+
+      <p>
+        <input id="notifications_note" name="notifications[note]" type="checkbox" <%= user.notifications.note ? 'checked="checked"' : '' %> class="checkbox"/>
+        <label for="notifications_note"><%= t('settings.notify-note') %></label>
+      </p>
+    </fieldset>
+
+
+    <fieldset class="tab" style="display: none;" id="tab_themes">
+      <p>
+        <input id="preference_theme_graphite" name="preference[theme]" type="radio" <%= !user.preference.theme || user.preference.theme  == 'graphite' ? 'checked="checked"' : '' %> value="graphite"/>
+          <label for="preference_theme_graphite"><span class="theme graphite"><b class="base"></b><b class="active"></b><b class="canvas "></b><b class="edge "></b><b class="text"></b></span>Parallel Worlds</label><br>
+
+        <input id="preference_theme_princess" name="preference[theme]" type="radio" value="princess" <%= user.preference.theme  == 'princess' ? 'checked="checked"' : '' %>/>
+          <label for="preference_theme_princess"><span class="theme princess"><b class="base"></b><b class="active"></b><b class="canvas "></b><b class="edge "></b><b class="text"></b></span>Hysterical Princess</label><br>
+
+        <input id="preference_theme_path" name="preference[theme]" type="radio" value="path" <%= user.preference.theme  == 'path' ? 'checked="checked"' : '' %>/>
+          <label for="preference_theme_path"><span class="theme path"><b class="base"></b><b class="active"></b><b class="canvas "></b><b class="edge "></b><b class="text"></b></span>Golden Path</label><br>
+
+        <input id="preference_theme_clover" name="preference[theme]" type="radio" value="clover" <%= user.preference.theme  == 'clover' ? 'checked="checked"' : '' %>/>
+          <label for="preference_theme_clover"><span class="theme clover"><b class="base"></b><b class="active"></b><b class="canvas "></b><b class="edge "></b><b class="text"></b></span>Three Leaf Clover</label><br>
+
+        <input id="preference_theme_cloudy" name="preference[theme]" type="radio" value="cloudy" <%= user.preference.theme  == 'cloudy' ? 'checked="checked"' : '' %>/>
+          <label for="preference_theme_cloudy"><span class="theme cloudy"><b class="base"></b><b class="active"></b><b class="canvas "></b><b class="edge "></b><b class="text"></b></span>Cloudy Sky</label><br>
+
+        <input id="preference_theme_noir" name="preference[theme]" type="radio" value="noir" <%= user.preference.theme  == 'noir' ? 'checked="checked"' : '' %>/>
+          <label for="preference_theme_noir"><span class="theme noir"><b class="base"></b><b class="active"></b><b class="canvas "></b><b class="edge "></b><b class="text"></b></span>Noir Wine</label><br>
+
+        <input id="preference_theme_fish" name="preference[theme]" type="radio" value="fish" <%= user.preference.theme  == 'fish' ? 'checked="checked"' : '' %>/>
+          <label for="preference_theme_fish"><span class="theme fish"><b class="base"></b><b class="active"></b><b class="canvas "></b><b class="edge "></b><b class="text"></b></span>Red Cap Gold Fish</label><br>
+
+        <input id="preference_theme_gray" name="preference[theme]" type="radio" value="gray" <%= user.preference.theme  == 'gray' ? 'checked="checked"' : '' %>/>
+          <label for="preference_theme_gray"><span class="theme gray"><b class="base"></b><b class="active"></b><b class="canvas "></b><b class="edge "></b><b class="text"></b></span>Gray Wolf</label><br>
+
+      </p>
+    </fieldset>
+
+    
+    <fieldset class="tab column" style="display: none;" id="tab_advanced">
+      <p>
+        <div class="label" style="height: 60px;"><%= t('settings.viewtype') %></div>
+        <input id="preference_viewtype_1" name="preference[viewtype]" type="radio" <%= user.preference.viewtype  == '1' ? 'checked="checked"' : '' %> value="1"/> <label for="preference_viewtype_1" class="radio icon-th-list"><%= t('settings.list') %></label><br>
+        <input id="preference_viewtype_2" name="preference[viewtype]" type="radio" value="2" <%= !user.preference.viewtype || user.preference.viewtype  == '2' ? 'checked="checked"' : '' %>/> <label for="preference_viewtype_2" class="radio icon-th"><%= t('settings.small') %></label><br>
+        <input id="preference_viewtype_3" name="preference[viewtype]" type="radio" value="3"<%= user.preference.viewtype  == '3' ? 'checked="checked"' : '' %> /> <label for="preference_viewtype_3" class="radio icon-th-large"><%= t('settings.large') %></label>
+      </p>
+
+      <p>
+        <div class="label"><%= t('settings.conflict') %></div>
+        <input id="preference_conflict_askme" name="preference[conflict]" type="radio" value="askme" <%= !user.preference.conflict || user.preference.conflict  == 'askme' ? 'checked="checked"' : '' %>/> <label class="radio" for="preference_conflict_askme" ><%= t('settings.askme') %></label>
+        <input id="preference_conflict_version" name="preference[conflict]" type="radio" value="version" <%= user.preference.conflict  == 'version' ? 'checked="checked"' : '' %>/> <label class="radio" for="preference_conflict_version" ><%= t('settings.version') %></label>
+      </p>
+
+      <p>
+        <div class="label"><%= t('settings.bar') %></div>
+        <input id="preference_layout_sidebar" name="preference[layout]" type="radio" disabled="disabled" value="sidebar" <%= !user.preference.layout || user.preference.layout  == 'sidebar' ? 'checked="checked"' : '' %>/> <label class="radio" style="color: #aaa" for="preference_layout_sidebar" ><%= t('settings.side') %></label>
+        <input id="preference_layout_topbar" name="preference[layout]" type="radio" disabled="disabled" value="topbar" <%= user.preference.layout  == 'topbar' ? 'checked="checked"' : '' %>/> <label class="radio" style="color: #aaa" for="preference_layout_topbar" ><%= t('settings.top') %>
+      </p>
+      
+      <p>
+        <div class="label"><%= t('settings.person') %></div>
+        <input id="preference_dispname_username" name="preference[dispname]" type="radio" value="username" <%= !user.preference.dispname || user.preference.dispname  == 'username' ? 'checked="checked"' : '' %>/> <label class="radio" for="preference_dispname_username" ><%= t('settings.personid') %></label>
+        <input id="preference_dispname_realname" name="preference[dispname]" type="radio" value="realname" <%= user.preference.dispname  == 'realname' ? 'checked="checked"' : '' %>/> <label class="radio" for="preference_dispname_realname" ><%= t('settings.personname') %></label>
+      </p>
+
+      <p>
+        <label for="preference_timezone"><%= t('settings.timezone') %>(GMT)</label>
+        <select name="preference[timezone]" id="preference_timezone">
+          <option value="540_seoul">Select</option>
+      		<option value="-720_international" <%= user.preference.timezone == '-720_international' ? 'selected="selected"' : '' %>>-12 International Date Line West</option>
+      		<option value="-660_midwayisland" <%= user.preference.timezone == '-660_midwayisland' ? 'selected="selected"' : '' %>>-11 Midway Island</option>
+      		<option value="-660_samoa" <%= user.preference.timezone == '-660_samoa' ? 'selected="selected"' : '' %>>-11 Samoa</option>
+          <option value="-600_hawaii" <%= user.preference.timezone == '-600_hawaii' ? 'selected="selected"' : '' %>>-10 Hawaii</option>
+      		<option value="-540_alaska" <%= user.preference.timezone == '-540_alaska' ? 'selected="selected"' : '' %>>-9 Alaska</option>
+      		<option value="-480_pacific" <%= user.preference.timezone == '-480_pacific' ? 'selected="selected"' : '' %>>-8 Pacific Time (US &amp; Canada)</option>
+      		<option value="-480_tijuana" <%= user.preference.timezone == '-480_tijuana' ? 'selected="selected"' : '' %>>-8 Tijuana</option>
+      		<option value="-420_arizona" <%= user.preference.timezone == '-420_arizona' ? 'selected="selected"' : '' %>>-7 Arizona</option>
+      		<option value="-420_chihuahua" <%= user.preference.timezone == '-420_chihuahua' ? 'selected="selected"' : '' %>>-7 Chihuahua</option>
+      		<option value="-420_mazatlan" <%= user.preference.timezone == '-420_mazatlan' ? 'selected="selected"' : '' %>>-7 Mazatlan</option>
+      		<option value="-420_mountain" <%= user.preference.timezone == '-420_mountain' ? 'selected="selected"' : '' %>>-7 Mountain Time (US &amp; Canada)</option>
+      		<option value="-360_central" <%= user.preference.timezone == '-360_central' ? 'selected="selected"' : '' %>>-6 Central America</option>
+      		<option value="-360_guadalajara" <%= user.preference.timezone == '-360_guadalajara' ? 'selected="selected"' : '' %>>-6 Guadalajara</option>
+      		<option value="-360_mexico" <%= user.preference.timezone == '-360_mexico' ? 'selected="selected"' : '' %>>-6 Mexico City</option>
+      		<option value="-360_monterrey" <%= user.preference.timezone == '-360_monterrey' ? 'selected="selected"' : '' %>>-6 Monterrey</option>
+      		<option value="-360_saskatchewan" <%= user.preference.timezone == '-360_saskatchewan' ? 'selected="selected"' : '' %>>-6 Saskatchewan</option>
+      		<option value="-300_eastern" <%= user.preference.timezone == '-300_eastern' ? 'selected="selected"' : '' %>>-5 Eastern Time (US &amp; Canada)</option>
+      		<option value="-300_indiana" <%= user.preference.timezone == '-300_indiana' ? 'selected="selected"' : '' %>>-5 Indiana (East)</option>
+      		<option value="-300_bogota" <%= user.preference.timezone == '-300_bogota' ? 'selected="selected"' : '' %>>-5 Bogota</option>
+      		<option value="-300_lima" <%= user.preference.timezone == '-300_lima' ? 'selected="selected"' : '' %>>-5 Lima</option>
+      		<option value="-300_quito" <%= user.preference.timezone == '-300_quito' ? 'selected="selected"' : '' %>>-5 Quito</option>
+      		<option value="-270_caracas" <%= user.preference.timezone == '-270_caracas' ? 'selected="selected"' : '' %>>-4.5 Caracas</option>
+      		<option value="-240_atlantic" <%= user.preference.timezone == '-240_atlantic' ? 'selected="selected"' : '' %>>-4 Atlantic Time (Canada)</option>
+      		<option value="-240_lapaz" <%= user.preference.timezone == '-240_lapaz' ? 'selected="selected"' : '' %>>-4 La Paz</option>
+      		<option value="-240_santiago" <%= user.preference.timezone == '-240_santiago' ? 'selected="selected"' : '' %>>-4 Santiago</option>
+      		<option value="-210_newfoundland" <%= user.preference.timezone == '-210_newfoundland' ? 'selected="selected"' : '' %>>-3.5 Newfoundland</option>
+      		<option value="-180_brasilia" <%= user.preference.timezone == '-180_brasilia' ? 'selected="selected"' : '' %>>-3 Brasilia</option>
+      		<option value="-180_buenosaires" <%= user.preference.timezone == '-180_buenosaires' ? 'selected="selected"' : '' %>>-3 Buenos Aires</option>
+      		<option value="-180_georgetown" <%= user.preference.timezone == '-180_georgetown' ? 'selected="selected"' : '' %>>-3 Georgetown</option>
+      		<option value="-180_greenland" <%= user.preference.timezone == '-180_greenland' ? 'selected="selected"' : '' %>>-3 Greenland</option>
+      		<option value="-120_midatlantic" <%= user.preference.timezone == '-120_midatlantic' ? 'selected="selected"' : '' %>>-2 Mid-Atlantic</option>
+      		<option value="-60_azores" <%= user.preference.timezone == '-60_azores' ? 'selected="selected"' : '' %>>-1 Azores</option>
+      		<option value="-60_capeverde" <%= user.preference.timezone == '-60_capeverde' ? 'selected="selected"' : '' %>>-1 Cape Verde Island</option>
+      		<option value="0_casablanca" <%= user.preference.timezone == '0_casablanca' ? 'selected="selected"' : '' %>>0 Casablanca</option>
+      		<option value="0_dublin" <%= user.preference.timezone == '0_dublin' ? 'selected="selected"' : '' %>>0 Dublin</option>
+      		<option value="0_edinburgh" <%= user.preference.timezone == '0_edinburgh' ? 'selected="selected"' : '' %>>0 Edinburgh</option>
+      		<option value="0_lisbon" <%= user.preference.timezone == '0_lisbon' ? 'selected="selected"' : '' %>>0 Lisbon</option>
+      		<option value="0_london" <%= user.preference.timezone == '0_london' ? 'selected="selected"' : '' %>>0 London</option>
+      		<option value="0_monrovia" <%= user.preference.timezone == '0_monrovia' ? 'selected="selected"' : '' %>>0 Monrovia</option>
+      		<option value="60_amsterdam" <%= user.preference.timezone == '60_amsterdam' ? 'selected="selected"' : '' %>>+1 Amsterdam</option>
+      		<option value="60_belgrade" <%= user.preference.timezone == '60_belgrade' ? 'selected="selected"' : '' %>>+1 Belgrade</option>
+      		<option value="60_berlin" <%= user.preference.timezone == '60_berlin' ? 'selected="selected"' : '' %>>+1 Berlin</option>
+      		<option value="60_bern" <%= user.preference.timezone == '60_bern' ? 'selected="selected"' : '' %>>+1 Bern</option>
+      		<option value="60_bratislava" <%= user.preference.timezone == '60_bern' ? 'selected="selected"' : '' %>>+1 Bratislava</option>
+      		<option value="60_brussels" <%= user.preference.timezone == '60_brussels' ? 'selected="selected"' : '' %>>+1 Brussels</option>
+      		<option value="60_budapest" <%= user.preference.timezone == '60_budapest' ? 'selected="selected"' : '' %>>+1 Budapest</option>
+      		<option value="60_copenhagen" <%= user.preference.timezone == '60_copenhagen' ? 'selected="selected"' : '' %>>+1 Copenhagen</option>
+      		<option value="60_ljubljana" <%= user.preference.timezone == '60_ljubljana' ? 'selected="selected"' : '' %>>+1 Ljubljana</option>
+      		<option value="60_madrid" <%= user.preference.timezone == '60_madrid' ? 'selected="selected"' : '' %>>+1 Madrid</option>
+      		<option value="60_paris" <%= user.preference.timezone == '60_paris' ? 'selected="selected"' : '' %>>+1 Paris</option>
+      		<option value="60_prague" <%= user.preference.timezone == '60_prague' ? 'selected="selected"' : '' %>>+1 Prague</option>
+      		<option value="60_rome" <%= user.preference.timezone == '60_rome' ? 'selected="selected"' : '' %>>+1 Rome</option>
+      		<option value="60_sarajevo" <%= user.preference.timezone == '60_sarajevo' ? 'selected="selected"' : '' %>>+1 Sarajevo</option>
+      		<option value="60_skopje" <%= user.preference.timezone == '60_skopje' ? 'selected="selected"' : '' %>>+1 Skopje</option>
+      		<option value="60_stockholm" <%= user.preference.timezone == '60_stockholm' ? 'selected="selected"' : '' %>>+1 Stockholm</option>
+      		<option value="60_vienna" <%= user.preference.timezone == '60_vienna' ? 'selected="selected"' : '' %>>+1 Vienna</option>
+      		<option value="60_warsaw" <%= user.preference.timezone == '60_warsaw' ? 'selected="selected"' : '' %>>+1 Warsaw</option>
+      		<option value="60_westcentralafric" <%= user.preference.timezone == '60_westcentralafric' ? 'selected="selected"' : '' %>>+1 West Central Africa</option>
+      		<option value="60_zagreb" <%= user.preference.timezone == '60_zagreb' ? 'selected="selected"' : '' %>>+1 Zagreb</option>
+      		<option value="120_athens" <%= user.preference.timezone == '120_athens' ? 'selected="selected"' : '' %>>+2 Athens</option>
+      		<option value="120_bucharest" <%= user.preference.timezone == '120_bucharest' ? 'selected="selected"' : '' %>>+2 Bucharest</option>
+      		<option value="120_cairo" <%= user.preference.timezone == '120_cairo' ? 'selected="selected"' : '' %>>+2 Cairo</option>
+      		<option value="120_harare" <%= user.preference.timezone == '120_harare' ? 'selected="selected"' : '' %>>+2 Harare</option>
+      		<option value="120_helsinki" <%= user.preference.timezone == '120_helsinki' ? 'selected="selected"' : '' %>>+2 Helsinki</option>
+      		<option value="120_istanbul" <%= user.preference.timezone == '120_istanbul' ? 'selected="selected"' : '' %>>+2 Istanbul</option>
+      		<option value="120_jerusalem" <%= user.preference.timezone == '120_jerusalem' ? 'selected="selected"' : '' %>>+2 Jerusalem</option>
+      		<option value="120_kyiv" <%= user.preference.timezone == '120_kyiv' ? 'selected="selected"' : '' %>>+2 Kyiv</option>
+      		<option value="120_minsk" <%= user.preference.timezone == '120_minsk' ? 'selected="selected"' : '' %>>+2 Minsk</option>
+      		<option value="120_pretoria" <%= user.preference.timezone == '120_pretoria' ? 'selected="selected"' : '' %>>+2 Pretoria</option>
+      		<option value="120_riga" <%= user.preference.timezone == '120_riga' ? 'selected="selected"' : '' %>>+2 Riga</option>
+      		<option value="120_sofia" <%= user.preference.timezone == '120_sofia' ? 'selected="selected"' : '' %>>+2 Sofia</option>
+      		<option value="120_tallinn" <%= user.preference.timezone == '120_tallinn' ? 'selected="selected"' : '' %>>+2 Tallinn</option>
+      		<option value="120_vilnius" <%= user.preference.timezone == '120_vilnius' ? 'selected="selected"' : '' %>>+2 Vilnius</option>
+      		<option value="180_baghdad" <%= user.preference.timezone == '180_baghdad' ? 'selected="selected"' : '' %>>+3 Baghdad</option>
+      		<option value="180_kuwait" <%= user.preference.timezone == '180_kuwait' ? 'selected="selected"' : '' %>>+3 Kuwait</option>
+      		<option value="180_moscow" <%= user.preference.timezone == '180_moscow' ? 'selected="selected"' : '' %>>+3 Moscow</option>
+      		<option value="180_nairobi" <%= user.preference.timezone == '180_nairobi' ? 'selected="selected"' : '' %>>+3 Nairobi</option>
+      		<option value="180_riyadh" <%= user.preference.timezone == '180_riyadh' ? 'selected="selected"' : '' %>>+3 Riyadh</option>
+      		<option value="180_saintpetersburg" <%= user.preference.timezone == '180_saintpetersburg' ? 'selected="selected"' : '' %>>+3 Saint Petersburg</option>
+      		<option value="180_volgograd" <%= user.preference.timezone == '180_volgograd' ? 'selected="selected"' : '' %>>+3 Volgograd</option>
+      		<option value="210_tehran" <%= user.preference.timezone == '210_tehran' ? 'selected="selected"' : '' %>>+3.5 Tehran</option>
+      		<option value="240_abudhabi" <%= user.preference.timezone == '240_abudhabi' ? 'selected="selected"' : '' %>>+4 Abu Dhabi</option>
+      		<option value="240_baku" <%= user.preference.timezone == '240_baku' ? 'selected="selected"' : '' %>>+4 Baku</option>
+      		<option value="240_muscat" <%= user.preference.timezone == '240_muscat' ? 'selected="selected"' : '' %>>+4 Muscat</option>
+      		<option value="240_tbilisi" <%= user.preference.timezone == '240_tbilisi' ? 'selected="selected"' : '' %>>+4 Tbilisi</option>
+      		<option value="240_yerevan" <%= user.preference.timezone == '240_yerevan' ? 'selected="selected"' : '' %>>+4 Yerevan</option>
+      		<option value="270_kabul" <%= user.preference.timezone == '270_kabul' ? 'selected="selected"' : '' %>>+4.5 Kabul</option>
+      		<option value="300_ekaterinburg" <%= user.preference.timezone == '300_ekaterinburg' ? 'selected="selected"' : '' %>>+5 Ekaterinburg</option>
+      		<option value="300_islamabad" <%= user.preference.timezone == '300_islamabad' ? 'selected="selected"' : '' %>>+5 Islamabad</option>
+      		<option value="300_karachi" <%= user.preference.timezone == '300_karachi' ? 'selected="selected"' : '' %>>+5 Karachi</option>
+      		<option value="300_tashkent" <%= user.preference.timezone == '300_tashkent' ? 'selected="selected"' : '' %>>+5 Tashkent</option>
+      		<option value="330_chennai" <%= user.preference.timezone == '330_chennai' ? 'selected="selected"' : '' %>>+5.5 Chennai</option>
+      		<option value="330_kolkata" <%= user.preference.timezone == '330_kolkata' ? 'selected="selected"' : '' %>>+5.5 Kolkata</option>
+      		<option value="330_mumbai" <%= user.preference.timezone == '330_mumbai' ? 'selected="selected"' : '' %>>+5.5 Mumbai</option>
+      		<option value="330_newdelhi" <%= user.preference.timezone == '330_newdelhi' ? 'selected="selected"' : '' %>>+5.5 New Delhi</option>
+      		<option value="345_kathmandu" <%= user.preference.timezone == '345_kathmandu' ? 'selected="selected"' : '' %>>+5.75 Kathmandu</option>
+      		<option value="360_almaty" <%= user.preference.timezone == '360_almaty' ? 'selected="selected"' : '' %>>+6 Almaty</option>
+      		<option value="360_astana" <%= user.preference.timezone == '360_astana' ? 'selected="selected"' : '' %>>+6 Astana</option>
+      		<option value="360_dhaka" <%= user.preference.timezone == '360_dhaka' ? 'selected="selected"' : '' %>>+6 Dhaka</option>
+      		<option value="360_novosibirsk" <%= user.preference.timezone == '360_novosibirsk' ? 'selected="selected"' : '' %>>+6 Novosibirsk</option>
+      		<option value="360_srijayawardenepura" <%= user.preference.timezone == '360_srijayawardenepura' ? 'selected="selected"' : '' %>>+6 Sri Jayawardenepura</option>
+      		<option value="390_rangoon" <%= user.preference.timezone == '390_rangoon' ? 'selected="selected"' : '' %>>+6.5 Rangoon</option>
+      		<option value="420_bangkok" <%= user.preference.timezone == '420_bangkok' ? 'selected="selected"' : '' %>>+7 Bangkok</option>
+      		<option value="420_hanoi" <%= user.preference.timezone == '420_hanoi' ? 'selected="selected"' : '' %>>+7 Hanoi</option>
+      		<option value="420_jakarta" <%= user.preference.timezone == '420_jakarta' ? 'selected="selected"' : '' %>>+7 Jakarta</option>
+      		<option value="420_krasnoyarsk" <%= user.preference.timezone == '420_krasnoyarsk' ? 'selected="selected"' : '' %>>+7 Krasnoyarsk</option>
+      		<option value="480_beijing" <%= user.preference.timezone == '480_beijing' ? 'selected="selected"' : '' %>>+8 Beijing</option>
+      		<option value="480_chongqing" <%= user.preference.timezone == '480_chongqing' ? 'selected="selected"' : '' %>>+8 Chongqing</option>
+      		<option value="480_hongkong" <%= user.preference.timezone == '480_hongkong' ? 'selected="selected"' : '' %>>+8 Hong Kong</option>
+      		<option value="480_irkutsk" <%= user.preference.timezone == '480_irkutsk' ? 'selected="selected"' : '' %>>+8 Irkutsk</option>
+      		<option value="480_kualalumpur" <%= user.preference.timezone == '480_kualalumpur' ? 'selected="selected"' : '' %>>+8 Kuala Lumpur</option>
+      		<option value="480_perth" <%= user.preference.timezone == '480_perth' ? 'selected="selected"' : '' %>>+8 Perth</option>
+      		<option value="480_singapore" <%= user.preference.timezone == '480_singapore' ? 'selected="selected"' : '' %>>+8 Singapore</option>
+      		<option value="480_taipei" <%= user.preference.timezone == '480_taipei' ? 'selected="selected"' : '' %>>+8 Taipei</option>
+      		<option value="480_ulaanbataar" <%= user.preference.timezone == '480_ulaanbataar' ? 'selected="selected"' : '' %>>+8 Ulaan Bataar</option>
+      		<option value="480_urumqi" <%= user.preference.timezone == '480_urumqi' ? 'selected="selected"' : '' %>>+8 Urumqi</option>
+      		<option value="540_osaka" <%= user.preference.timezone == '540_osaka' ? 'selected="selected"' : '' %>>+9 Osaka</option>
+      		<option value="540_sapporo" <%= user.preference.timezone == '540_sapporo' ? 'selected="selected"' : '' %>>+9 Sapporo</option>
+      		<option value="540_tokyo" <%= user.preference.timezone == '540_tokyo' ? 'selected="selected"' : '' %>>+9 Tokyo</option>
+      		<option value="540_seoul" <%= !user.preference.timezone || user.preference.timezone == '540_seoul' ? 'selected="selected"' : '' %>>+9 Seoul</option>
+      		<option value="540_yakutsk" <%= user.preference.timezone == '540_yakutsk' ? 'selected="selected"' : '' %>>+9 Yakutsk</option>
+      		<option value="570_adelaide" <%= user.preference.timezone == '570_adelaide' ? 'selected="selected"' : '' %>>+9.5 Adelaide</option>
+      		<option value="570_darwin" <%= user.preference.timezone == '570_darwin' ? 'selected="selected"' : '' %>>+9.5 Darwin</option>
+      		<option value="600_brisbane" <%= user.preference.timezone == '600_brisbane' ? 'selected="selected"' : '' %>>+10 Brisbane</option>
+      		<option value="600_canberra" <%= user.preference.timezone == '600_canberra' ? 'selected="selected"' : '' %>>+10 Canberra</option>
+      		<option value="600_guam" <%= user.preference.timezone == '600_guam' ? 'selected="selected"' : '' %>>+10 Guam</option>
+      		<option value="600_hobart" <%= user.preference.timezone == '600_hobart' ? 'selected="selected"' : '' %>>+10 Hobart</option>
+      		<option value="600_melbourne" <%= user.preference.timezone == '600_melbourne' ? 'selected="selected"' : '' %>>+10 Melbourne</option>
+      		<option value="600_portmoresby" <%= user.preference.timezone == '600_portmoresby' ? 'selected="selected"' : '' %>>+10 Port Moresby</option>
+      		<option value="600_sydney" <%= user.preference.timezone == '600_sydney' ? 'selected="selected"' : '' %>>+10 Sydney</option>
+      		<option value="600_vladivostok" <%= user.preference.timezone == '600_vladivostok' ? 'selected="selected"' : '' %>>+10 Vladivostok</option>
+      		<option value="660_magadan" <%= user.preference.timezone == '660_magadan' ? 'selected="selected"' : '' %>>+11 Magadan</option>
+      		<option value="660_newcaledonia" <%= user.preference.timezone == '660_magadan' ? 'selected="selected"' : '' %>>+11 New Caledonia</option>
+      		<option value="660_solomonisland" <%= user.preference.timezone == '660_solomonisland' ? 'selected="selected"' : '' %>>+11 Solomon Island</option>
+      		<option value="720_auckland" <%= user.preference.timezone == '720_auckland' ? 'selected="selected"' : '' %>>+12 Auckland</option>
+      		<option value="720_fiji" <%= user.preference.timezone == '720_fiji' ? 'selected="selected"' : '' %>>+12 Fiji</option>
+      		<option value="720_kamchatka" <%= user.preference.timezone == '720_kamchatka' ? 'selected="selected"' : '' %>>+12 Kamchatka</option>
+      		<option value="720_marshallisland" <%= user.preference.timezone == '720_marshallisland' ? 'selected="selected"' : '' %>>+12 Marshall Island</option>
+      		<option value="720_wellington" <%= user.preference.timezone == '720_wellington' ? 'selected="selected"' : '' %>>+12 Wellington</option>
+      		<option value="780_nukualofa" <%= user.preference.timezone == '780_nukualofa' ? 'selected="selected"' : '' %>>+13 Nuku'alofa</option>
+        </select>
+      </p>
+    </fieldset>
+
+
+    <fieldset class="actions">
+      <button class="button ok"><%= t('actions.apply') %></button>
+      <button class="button" id="cancel" onclick="Velox.hideDialog(event)"><%= t('actions.cancel') %></button>
+    </fieldset>
+  </form>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  $('settings_tabs').observe('click', function(event) {
+    var el = event.element();
+    if (el.tagName != 'A') return;
+
+    $$('#settings_tabs a').invoke('removeClassName', 'active');
+    el.addClassName('active');
+
+    $$('#dialog fieldset.tab').invoke('hide');
+    $('tab_' + el.id.split('_')[1]).show();
+  });
+  
+  //placeholderShiv('dialog');
+</script>

@@ -1,0 +1,48 @@
+<!-- Assets -->
+
+<header id="toolbar-wrapper">
+  <%- partial('_section_toolbar') %>
+</header>
+
+<aside id="filter-panel">
+  <%- partial('_renderTag', {project: selected}) %>
+</aside>
+<aside id="managetags-panel" style="display: none"></aside>
+
+<article id="content-panel">
+  <%- partial('_section_content', {project: selected}) %>
+</article>
+
+<div id="notes-wrapper"></div>
+
+<iframe src="" id="upload" width="32" height="32" scrolling="no" frameborder="0"></iframe>
+
+<% if (app.settings.env == 'development') { %>
+<script src="/javascripts/assets.js?v=<%= app.version %>"></script>
+<% } %>
+
+<script>
+
+  var doSearch = function(element, value) {
+    new Ajax.Request('/assets/<%=selected.id%>/search', {
+      asynchronous: true,
+      evalScripts: true,
+      parameters: 'q=' + encodeURIComponent(value)
+    });
+  };
+
+  <% notecount.forEach(function(box) { %>
+  Velox.notifyNewItem('<%= box._id %>', {count: <%= box.value %>, type: 'warn'});
+  <% });%>
+
+  Assets.initialize({
+    zoomLevel: <%= session.user.settings.zoomLevel %>,
+    viewType: "<%= session.user.settings.viewType %>",
+    conflict: "<%= session.user.settings.conflict %>",
+    boxId: "<%= selected.id %>"
+  });
+
+  Velox.registerResizeCallback(AssetsLoader.check.bind(AssetsLoader));
+  new Control.Selector('assets-container');
+
+</script>

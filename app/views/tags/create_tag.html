@@ -1,0 +1,4 @@
+//Assets.nothingHappened = false; 
+//Assets.refresh("tags");
+Assets.updateManageTags();
+$('document_tags').insert('<div class="tag" id="tag_<%= tag.id %>" onclick="Assets.toggleTagFilter(this, \'<%= tag.id %>\')" title="<%= tag.name %>"><%= tag.name %></div>');

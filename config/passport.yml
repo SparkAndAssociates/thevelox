@@ -1,0 +1,8 @@
+development:
+  baseURL: 'http://localhost:3231/'
+  local: yes
+
+production:
+  baseURL: 'http://localhost:3231/'
+  local: yes
+

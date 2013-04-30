@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="imagetoolbar" content="no" />  
+  <title>Upload</title>
+  <style>
+    * { margin: 0; padding: 0; border: none; }
+  </style>
+</head>
+<body>
+
+  <form action="" enctype="multipart/form-data" id="upload-form" method="post">
+    <input class="file" multiple="multiple" name="file" type="file" style="cursor: pointer; marign-left: -160px; width: 50px; height: 50px;" />
+  </form>
+
+  <script>
+    <% if (app.settings.env != 'development') { %>(function(b,a){b.console={log:a,info:a,warn:a,error:a}})(window,function(){})<% } %>
+    I18n = parent.I18n;
+    I18n.locales.en = {
+      "upload.unknown_error": "An unknown error occurred, please try your upload again",
+      "upload.fatal_error": "File could not be uploaded",
+      "upload.percent_complete": "&lt;%= percent %&gt; of &lt;%= total %&gt; uploaded".replace(/&lt;/g, '<').replace(/&gt;/g, '>'),
+      "upload.starting": "Uploading...",
+      "upload.cancelled": "Upload cancelled",
+      "upload.queued": "Upload queued",
+      "upload.retrying": "Error uploading, retrying in 5 seconds...",
+      "upload.drag_drop": "Drag and Drop Files Here",
+      "upload.add_files": "Select a file<br>to upload",
+      "upload.close_alert": "File upload in progress, are you sure?",
+      "upload.time_left_calc": ", calculating remaining time",
+      "upload.time_left": ", about &lt;%= time %&gt; left ".replace(/&lt;/g, '<').replace(/&gt;/g, '>'),
+      "upload.preview": "Preview",
+      "upload.public_link": "Public link",
+      "upload.public_link_copied": "Copied!",
+      "upload.email": "Email",
+      "upload.email_subject": "Velox: 1 asset",
+      "upload.edit": "Edit",
+      "upload.cancel": "Cancel",
+      "upload.remove": "Remove",
+      "upload.retry": "Retry"
+    };
+  </script>  
+  <script src="/javascripts/vendor/jquery.min.js?v=<%= app.version %>" type="text/javascript"></script>
+  <script src="/javascripts/vendor/underscore.min.js?v=<%= app.version %>" type="text/javascript"></script>
+  <script src="/javascripts/vendor/backbone.min.js?v=<%= app.version %>" type="text/javascript"></script>
+  <script src="/javascripts/upload.js?v=<%= app.version %>" type="text/javascript"></script>  
+</body>
+</html>

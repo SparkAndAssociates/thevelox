@@ -1,0 +1,90 @@
+<% if (wrapper) { %>
+<div id="preview-panel-content" class="panel-contents" style="background:transparent; height:100%;" onclick="Velox.hideDialog(event);">
+<% } %>
+  <div id="preview-wrapper">
+    <div id="embedded_doc" style="position: absolute; top: 50%; left: 50%; "></div>
+  </div>
+
+  <div id="doc-title" class="title" style="position:relative;text-align:center;color:#eee;font-size:14px;margin-top:10px;display:none;">
+    <a href="/files/<%=params.box%>/download/<%= file.id %>" target="_blank" title="<%= t('global.download') %>"><b><%= file.name %></b></a><br />
+  </div>
+
+<% if (wrapper) { %>
+</div>
+
+<div class="panel-header">
+  <div class="paging" id="preview-paging">
+    <a href="#" title="Previous asset" id="preview-paging-previous" class="paging-previous">&larr; <%= t('actions.previous') %></a>
+    <p id="preview-paging-position" class="paging-position"> </p>
+    <a href="#" title="Next asset" id="preview-paging-next" class="paging-next"><%= t('actions.next') %> &rarr;</a>
+  </div>
+
+  <div id="controls">
+    <div onclick="Velox.changeOverlayColor('fff')" style="background-color:#fff;"></div>
+    <div onclick="Velox.changeOverlayColor('7f7f7f')" style="background-color:#7f7f7f;"></div>
+    <div onclick="Velox.changeOverlayColor('000')" style="background-color:#000;"></div>
+  </div>
+</div>
+<% } %>
+
+
+<script>
+(function() {
+  var embeddedDoc = $('embedded_doc')
+    , viewportHeight = document.viewport.getHeight()
+    , viewportWidth = document.viewport.getWidth()
+    , viewportOffset = 50
+    , width = viewportWidth - viewportWidth / (Assets.options.touch ? 8 : 3)
+    , height = viewportHeight - viewportHeight / 4;
+
+  embeddedDoc.setStyle({
+    width: width + 'px',
+    height: height + 'px',
+    marginTop: - (height / 2 + viewportOffset) + 'px',
+    marginLeft: - width / 2 + 'px'
+  });
+
+  var scribdDoc = scribd.Document.getDoc(<%= file.scribd.id %>, '<%= file.scribd.key %>');
+
+  scribdDoc.addParam('jsapi_version', document.all && !document.addEventListener && 1 || 2);
+  scribdDoc.addParam('height', viewportHeight * 0.8);
+  //scribdDoc.addParam('width', viewportWidth * 0.6);
+  //scribdDoc.addParam('auto_size', true);
+  //scribdDoc.addParam('mode', 'scroll'); // scroll, list, book, slideshow, tile
+
+  scribdDoc.addEventListener('docReady', function() {
+    /*
+    var docWidth = embeddedDoc.show().down('.outer_page').getWidth()
+      , docHeight = embeddedDoc.down('.outer_page').getHeight()
+      , width =  embeddedDoc.getWidth()
+      , height = embeddedDoc.getHeight()
+		  , scale = (height - 20) / docHeight;
+
+		if (width < docWidth * scale) scale = (width - 20) / docWidth;
+		
+	  scribdDoc.api.setZoom(scale);
+	  embeddedDoc.setStyle({
+	    width: docWidth * scale + 20 + 'px',
+	    height: docHeight * scale + 20 + 'px'
+	  });
+
+		Assets.resizeDoc(viewportWidth, viewportHeight);
+		*/
+  });
+
+  scribdDoc.addEventListener('zoomChanged', function() {
+    console.log('zoomChanged');
+  });
+
+  scribdDoc.addEventListener('pageChanged', function() {
+    console.log('pageChanged', scribdDoc.api.getPage());
+  });
+
+  //scribdDoc.seamless('embedded_doc');
+  scribdDoc.write('embedded_doc');
+  //Assets.resizeDoc(viewportWidth, viewportHeight);
+
+  
+})();
+  
+</script>

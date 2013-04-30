@@ -1,0 +1,16 @@
+<div id="dialog" class="confirm">
+
+  <form class="dialog-content" method="post" onsubmit="return false;">
+    <p><%= t([actionName + '.' + message].concat(args)) || message %></p>
+
+    <fieldset class="actions">
+      <% if (actionName == 'confirm') { %>
+        <button class="button ok" onclick="Velox['<%= actionName %>'](true)"><%= t(type == 'yesorno' ? 'actions._yes' : 'actions.confirm') %></button>
+        <button class="button" onclick="Velox['<%= actionName %>'](false)"><%= t(type == 'yesorno' ? 'actions._no' : 'actions.cancel') %></button>
+      <% } else { %>
+        <button class="button ok"><%= t('actions.ok') %></button>
+      <% } %>
+    </fieldset>
+  </form>
+
+</div>

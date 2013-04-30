@@ -1,0 +1,18 @@
+<% if (wrapper) { %>
+<script>
+parent.Upload.currentModel.setData(
+<% } %>
+{
+  "available_space": "<%= _size(availableSpace) %>",
+  "version": "<%= file.versions && file.versions.length + 1 || 1 %>",
+  "thumb": "/images/<%= isImageType ? 'generating-preview' : isDocumentType ? 'generating-document' : 'mime/public.' + _mime(file.mime) %>.gif",
+  "mime": "<%= _mime(file.mime) %>",
+  "status": "complete",
+  "message": "Completed",
+  "name": "<%= file.name %>",
+  "id": "<%= file.id %>"
+}
+<% if (wrapper) { %>
+);
+</script>
+<% } %>

@@ -1,0 +1,78 @@
+<div id="dialog" class="sendbox">
+  <h3 class="icon-inbox"><%= t('receive.title') %></h3>
+
+  <div class="dialog-content">
+    <div id="link_wrapper">
+      <p style="margin-top: 10px; margin-bottom: 10px; font-szie: 13px;"><%= t('receive.hint') %></p>
+
+      <p style="margin-top: 10px;">
+        <input id="receive_link" type="text" readonly="readonly" value="/delivery/<%= userId %>/<%= _encode64(containerId) %>"/>
+      </p>
+    
+      <p style="margin-top: 10px;" class="panel-hint" id="link_wrapper">
+        <%= t('receive.status') %>:
+        <code class="badge"><%= box.linkInfo.isEnabled ? t('receive.opened') : t('receive.closed') %></code>
+        <code class="badge"><%= box.linkInfo.password || box.linkInfo.recipient && box.linkInfo.recipient.length ? t('receive.protected') : t('receive.published') %></code>
+      </p>
+    </div>
+  
+    <form action="/delivery/<%= containerId %>/update" id="sendbox_form" method="post" style="display: none">
+      <fieldset style="float: left; width: 240px; padding-right: 10px; height: 170px;">
+        <label for="subject"><%= t('share.subject') %> <span><%= t('global.required') %></span></label>
+        <input class="text-input" id="subject" name="subject" type="text" value="<%=box.linkInfo.subject || ''%>" />
+  
+        <label for="message" style="margin-top: 10px;"><%= t('share.message') %></label>
+        <textarea cols="40" id="message" name="message" rows="5" style="height: 82px"><%=box.linkInfo.message || '' %></textarea>
+      </fieldset>
+  
+      <fieldset>
+        <label for="status"><%= t('receive.status') %></label>
+        <select name="status">
+          <option value="1" <%= box.linkInfo.isEnabled? "selected='selected'" : '' %>><%= t('receive.opened') %></option>
+          <option value="0" <%= !box.linkInfo.isEnabled? "selected='selected'" : '' %>><%= t('receive.closed') %></option>
+        </select>
+      </fieldset>
+  
+      <fieldset>
+        <label for="password"><%= t('share.password') %> <span><%= t('global.optional') %></span></label>
+        <input class="text-input" id="password" name="password" type="password" value="<%= box.linkInfo.password || '' %>" placeholder="<%= t('share.password-hint') %>" />
+      </fieldset>
+  
+      <fieldset>
+        <label for="recipient"><%= t('share.recipient') %> <span><%= t('global.optional') %></span></label>
+        <input class="text-input" id="recipient" name="recipient" type="text" value="<%= box.linkInfo.recipient && box.linkInfo.recipient.join(', ') || '' %>" placeholder="<%= t('share.recipient-hint') %>" />
+        <p class="panel-hint"><%= t('share.recipient-desc') %></p>
+      </fieldset>
+  
+      <fieldset class="actions" style="z-index: 10">
+        <button class="button ok"><%= t('actions.submit') %></button>
+        <button class="button" id="cancel" onclick="$('sendbox_form').hide(); $('link_wrapper').show(); return false;"><%= t('actions.cancel') %></button>
+      </fieldset>
+    </form>  
+  
+    <fieldset class="actions">
+      <button class="button" id="shorten" onclick="Velox.shortenURL(this, 'receive_link')"><%= t('actions.shorten') %></button>
+      <!--button class="button"><%= t('actions.clipboard') %></button-->
+      <button class="button" onclick="window.open($('receive_link').value)"><%= t('actions.open') %></button>
+      <button class="button" onclick="$('sendbox_form').show(); $('link_wrapper').hide();"><%= t('actions.option') %></button>
+      <button class="button" id="cancel" onclick="Velox.hideDialog(event)"><%= t('actions.close') %></button>
+    </fieldset>
+  </div>
+</div>
+
+<script>
+  //placeholderShiv('sendbox_form');
+  $('receive_link').value = location.protocol + '//' + location.host + $('receive_link').value;
+  $('receive_link').activate();
+  $('sendbox_form').observe('submit', function(event) {
+    event.stop();
+    var form = event.element();
+    new Ajax.Request(form.action, {
+      method: form.method,
+      parameters: form.serialize(),
+      onSuccess: function(req) {
+        Assets.showReceiveLink();
+      }
+    });
+  });
+</script>

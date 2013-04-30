@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="imagetoolbar" content="no" />  
+  <meta name="apple-mobile-web-app-capable" content="yes">  
+
+  <title><%= actionName %><%= share.subject ? ': ' + share.subject : '' %> - Velox</title>
+
+  <link href="/stylesheets/delivery.css?v=<%= app.version %>" media="all" rel="stylesheet" type="text/css" />
+  <% if (actionName == 'export') { %>
+    <link href="/stylesheets/assets.css?v=<%= app.version %>" media="screen" rel="Stylesheet" type="text/css" />
+  <% } %>
+  <link href="/stylesheets/font-awesome.css?v=<%= app.version %>" media="screen" rel="Stylesheet" type="text/css" />
+  <style>
+  /* branding */
+  #header, #logo-preview {
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#000000), to(#32302E));
+    background-image: -moz-linear-gradient(top, #000000, #32302E);
+    filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=linear, StartColorstr=#000000, EndColorstr=#32302E);
+    background-color: #000000;
+  }
+  </style>
+
+  <!--[if lt IE 9]><script src="/javascripts/vendor/html5shiv.js?v=<%=app.version%>"></script><![endif]-->
+  <script src="/javascripts/vendor/socket.io.js?v=<%= app.version %>"></script>
+  <script src="/javascripts/vendor/prototype.js?v=<%= app.version %>"></script>
+  <script src="/javascripts/vendor/effects.js?v=<%= app.version %>"></script>
+  <script src="/javascripts/extensions.js?v=<%= app.version %>"></script>
+
+  <script type="text/javascript">
+    var enabledDropbox = <%= actionName == 'sendbox' %>; 
+    var socketUrl = location.protocol + '//' + '<%=app.config.socket.host %>' + (location.protocol == 'https:' ? '' : ':<%=app.config.socket.port %>');
+    if (Prototype.Browser.MobileSafari && !navigator.userAgent.match(/iPad/)) $(document.head).insert('<meta name="viewport" content="width=640, user-scalable=0">');
+  </script>
+</head>
+<body class="<%= actionName %>">
+
+  <div id="box">
+    <header id="header">
+      <div class="logo">
+        <h1 class="icon-cloud"><a href="/">Velox</a></h1>
+      </div>
+    </header>
+
+    <div id="content">
+
+    <%- body %>
+
+    </div>
+    <p class="version">v<%= app.version %></p>
+  </div>
+
+  <script type="text/javascript">
+  var _gaq = _gaq || []
+    , pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+
+  _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+  _gaq.push(['_setAccount', '<%= app.config.trackCode %>']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+  </script>
+</body>
+</html>

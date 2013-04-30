@@ -1,0 +1,61 @@
+<div style="height:36px;overflow:hidden;">
+  <div id="toolbar-container">
+    <div class="toolbar" id="toolbar">
+    
+      <form action="/dropbox/inbox" id="quick_search" method="post" onsubmit="new Ajax.Request('/dropbox/inbox', {asynchronous:true, evalScripts:true, parameters:Form.serialize(this)}); return false;">
+       <fieldset>
+           <label for="search" class="left">Search:</label>
+           <input class="search-field" id="search" name="search" type="text" />
+           <a href="#" title="Reset search" id="search_reset_button"> </a>
+       </fieldset>
+     </form>
+   
+   <span id="stage-info">
+     50 MB available
+   </span>
+ 
+ </div>
+</div>
+
+</div>
+<div id="main-panel">
+  <div id="content-panel">
+    <div id="dropbox-list">
+      <div class="drop" id="drop_15710">
+        <div class="preview">
+          <div class="image icon  "><!-- 프리뷰가 없는 경우 icon 클래스명 필요 -->
+            <img src="/images/mime/public.image.gif" alt="안녕하세요" onclick="Assets.preview(680898,0)" style="cursor:pointer" />
+          </div>
+          <p><span class="type type-dwg">dwg</span> 10.2 KB&#160;&#160;&#160;<a href="/assets/download/680898">download</a></p>
+        </div>
+        <div class="data">
+          <div class="head">
+            <span class="title">안녕하세요</span>
+            <div class="metadata">
+              Uploaded by <a href="mailto:to@firejune.com">to@firejune.com</a><br />
+              on 20th Aug 2012
+            </div>
+            <div class="actions">
+              <a href="/dropbox/approve/15710" class="button" style="margin:0 0 5px 9px"><span>Move to Assets</span></a>        <a href="/dropbox/delete/15710" class="button" onclick="return confirm('Are you sure you want to delete this asset?');" style="margin:0 0 5px 9px"><span>Delete</span></a>
+            </div>
+          </div>
+          <p class="description">도면이에요.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var doSearch = function(element, value) {
+    new Ajax.Updater('dropbox-list', '/dropbox/inbox', {
+      asynchronous: true,
+      evalScripts: true,
+      parameters:'search=' + encodeURIComponent(value)
+    });
+  };
+
+  document.observe('dom:loaded', function() {
+    Velox.initVideoSkimming();
+	});
+</script>

@@ -1,0 +1,46 @@
+<form action="/delivery/<%= path %>/auth" id="auth" method="post">
+  <p id="message" style="color:red; display:block;">
+    <% if (error.length > 0) { %>
+      <%= error%>
+    <% } else if (info.length > 0) { %>
+      <span style="color:blue;"><%= info%></span>
+    <% } %>
+  </p>
+
+
+  <% if (mode == 'closed') { %>
+
+  <p class="message"><%- t('delivery.closed') %></p>
+
+  <% } else if (mode == 'expired') { %>
+
+  <p class="message"><%- t('delivery.expired') %></p>
+
+  <% } else if (mode == 'sent_email') { %>
+
+  <p class="message"><%- t('delivery.sent-email') %></p>
+
+  <% } else { %>
+
+    <% if (mode == 'recipient') { %>
+    <p class="message"><%- t('delivery.recipient-protected') %></p>
+    <div class="form-section">
+      <label for="username"><%= t('user.email') %></label>
+      <input type="text" name="email" id="email" placeholder="<%= t('user.email-ex') %>" size="30" value="" />
+    </div>
+    <% } %>
+
+    <% if (mode == 'password') { %>
+    <p class="message"><%- t('delivery.password-protected') %></p>
+    <div class="form-section">
+      <label for="password"><%= t('user.password') %></label>
+      <input type="password" name="password" id="password" size="30" placeholder="<%= t('user.password-help') %>" value="" />
+    </div>
+    <% } %>
+
+    <div class="form-submit">
+      <button type='submit' class='button'><span class='left'></span><span class='middle'><%= t('actions.confirm') %></span><span class='right'></span></button>
+    </div>
+
+  <% } %>
+</form>

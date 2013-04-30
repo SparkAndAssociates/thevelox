@@ -1,0 +1,130 @@
+text/csv                                                                   spreadsheet   documents
+text/comma-separated-values                                                spreadsheet   documents
+text/x-comma-separated-values                                              spreadsheet   documents
+text/tab-separated-values                                                  spreadsheet   documents
+application/csv                                                            spreadsheet   documents
+application/excel                                                          spreadsheet   documents
+application/vnd.ms-excel                                                   spreadsheet   documents
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet          spreadsheet   documents
+
+application/powerpoint                                                     presentation  documents
+application/vnd.ms-powerpoint                                              presentation  documents
+application/vnd.openxmlformats-officedocument.presentationml.presentation  presentation  documents
+
+application/epub                                                           document      documents
+application/epub+zip                                                       document      documents
+application/msword                                                         document      documents
+application/vnd.openxmlformats-officedocument.wordprocessingml.document    document      documents
+
+
+
+application/pdf               acrobat       documents
+
+application/xml               text          documents
+application/smil              text          documents
+application/smil+xml          text          documents
+application/xhtml+xml         text          documents
+application/ruby              text          documents
+application/rtf               text          documents
+application/x-httpd-php       text          documents
+application/x-javascript      text          documents
+text/x-c++hdr                 text          documents
+text/x-c++src                 text          documents
+text/x-chdr                   text          documents
+text/x-java                   text          documents
+text/x-perl                   text          documents
+text/x-python                 text          documents
+text/vbscript                 text          documents
+text/php                      text          documents
+text/html                     text          documents
+text/css                      text          documents
+text/javascript               text          documents
+text/xml                      text          documents
+text/rtf                      text          documents
+text/x-log                    text          documents
+text/x-registry               text          documents
+text/x-config                 text          documents
+text/plain                    text          documents
+text/x-sh                     text          documents
+text/calendar                 text          documents
+
+video/quicktime               quicktime     media
+
+application/x-shockwave-flash flash         media
+
+video/fli                     video         media
+video/dl                      video         media
+video/gl                      video         media
+video/avi                     video         media
+video/mp4                     video         media
+video/mpeg                    video         media
+video/x-ms-wmv                video         media
+video/x-ms-wma                video         media
+video/x-ms-wmx                video         media
+video/x-ms-wvx                video         media
+video/x-ms-asf                video         media
+video/x-msvideo               video         media
+video/x-flv                   video         media
+video/x-matroska              video         media
+video/x-matroska-3d           video         media
+
+audio/mp3                     audio         media
+audio/mpeg                    audio         media
+audio/x-sd2                   audio         media
+audio/x-gsm                   audio         media
+audio/x-scpls                 audio         media
+audio/x-matroska              audio         media
+audio/x-pn-realaudio          audio         media
+audio/x-realaudio             audio         media
+audio/x-aiff                  audio         media
+audio/basic                   audio         media
+audio/x-mpegurl               audio         media
+audio/mp4                     audio         media
+application/ogg               audio         media
+audio/midi                    audio         media
+audio/x-wav                   audio         media
+audio/x-ms-wma                audio         media
+audio/x-ms-wax                audio         media
+
+application/postscript        vector        media
+image/x-coreldraw             vector        media
+image/svg                     vector        media
+image/svg+xml                 vector        media
+image/vnd.dwg                 vector        media
+
+application/x-img             image         media
+image/jpeg                    image         media
+image/pjpeg                   image         media
+image/gif                     image         media
+image/ief                     image         media
+image/png                     image         media
+image/pcx                     image         media
+image/x-png                   image         media
+image/vnd.adobe.photoshop     image         media
+image/x-photoshop             image         media
+image/icon                    image         media
+image/x-icon                  image         media
+image/tiff                    image         media
+image/x-ms-bmp                image         media
+image/vnd.wap.wbmp            image         media
+image/x-jg                    image         media
+image/x-jng                   image         media
+image/x-rgb                   image         media
+image/x-xbitmap               image         media
+image/x-xpixmap               image         media
+image/x-xwindowdump           image         media
+
+application/x-bzip2           archive
+application/x-gzip            archive
+application/zip               archive
+application/x-zip             archive
+application/x-zip-compressed  archive
+application/x-7z-compressed   archive
+application/x-rar-compressed  archive
+application/rar               archive
+application/tar               archive
+application/x-tar             archive
+
+text/directory                contact
+
+default                       content

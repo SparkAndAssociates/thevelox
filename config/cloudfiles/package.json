@@ -1,0 +1,59 @@
+{
+  "name": "cloudfiles",
+  "description": "A client implementation for Rackspace CloudFiles in node.js",
+  "version": "0.3.4",
+  "author": {
+    "name": "Nodejitsu Inc.",
+    "email": "info@nodejitsu.com"
+  },
+  "maintainers": [
+    {
+      "name": "indexzero",
+      "email": "charlie@nodejitsu.com"
+    },
+    {
+      "name": "bmeck",
+      "email": "bradley@nodejitsu.com"
+    },
+    {
+      "name": "indutny",
+      "email": "fedor.indutny@gmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nodejitsu/node-cloudfiles.git"
+  },
+  "keywords": [
+    "cloud computing",
+    "api",
+    "rackspace cloud",
+    "cloudfiles"
+  ],
+  "dependencies": {
+    "async": "0.1.x",
+    "mime": "1.2.x",
+    "pkginfo": "0.2.x",
+    "request": "2.x.x"
+  },
+  "devDependencies": {
+    "vows": "0.6.x"
+  },
+  "main": "./lib/cloudfiles",
+  "scripts": {
+    "test": "vows test/*-test.js --spec"
+  },
+  "engines": {
+    "node": ">= 0.4.0"
+  },
+  "_id": "cloudfiles@0.3.4",
+  "optionalDependencies": {},
+  "_engineSupported": true,
+  "_npmVersion": "1.1.24",
+  "_nodeVersion": "v0.6.19",
+  "_defaultsLoaded": true,
+  "dist": {
+    "shasum": "6ddaca93a147856c6e39a23fb3fca0fad2f8af6c"
+  },
+  "_from": "cloudfiles"
+}

@@ -1,0 +1,45 @@
+a, a:visited, #waiting_overlay .message { color:#c9c9c9; }
+
+#filter-panel h3 { background: #3e3e3e; }
+#filter-panel .matrixselect div { background: #656565; border-bottom-color: #424242; }
+#filter-panel .matrixselect div.autotag { color: #cccccc; }
+
+.toolbar .button { border-color: #a9a9a9; }
+.toolbar .button.switch, .toolbar .button.active { color: #878787; }
+.toolbar .button.switch.active, .toolbar .button.active.panel {
+  color: #fff; background-color: #7c7c7c;
+  background-image: -webkit-linear-gradient(top, #b1b1b1 0%, #7a7667 49%, #9c9c9c 51%, #ababab 100%);
+  background-image: -moz-linear-gradient(top, #b1b1b1 0%, #7a7667 49%, #9c9c9c 51%, #ababab 100%);
+  filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=linear, StartColorstr=#b1b1b1, EndColorstr=#ababab);
+}
+
+.panel-contents .info .block .tag.active { background: #8c8c8c; }
+.panel-header {
+  background-color: #a2a2a2;
+  background-image: -webkit-linear-gradient(top, #a7a7a7 0%, #9d9d9d 49%, #989898 50%, #939393 100%);
+  background-image: -moz-linear-gradient(top, #a7a7a7 0%, #9d9d9d 49%, #989898 50%, #939393 100%);
+  filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=linear, StartColorstr=#a7a7a7, EndColorstr=#939393);
+}
+.metadata-block h2 a { background-color: #b9b9b9; border-bottom-color: #888888; }
+
+#dialog fieldset.actions { background: #dddddd; }
+
+button.button { border-color: #a8a8a8; color: #858585; }
+
+#taglist li:nth-child(even),
+.view-list .box:nth-child(even),
+.view-list .asset:nth-child(even) { background-color: #eeeeee; }
+.view-list .asset.selected { background-color: #aeaeae; }
+.view-thumbs .assets .asset.selected .wrapper { border-color: #aeaeae; box-shadow: 0 0 4px #e5e5e5; }
+.view-thumbs .asset.selected .a-details .a-title span { background-color: #aeaeae; }
+.touch .view-thumbs .assets .asset.selected .wrapper:hover { border-color: #aeaeae; }
+
+div.tagtool.active {
+  background-color:#9c9c9c; border-color:#9c9c9c;
+  background-image:-webkit-linear-gradient(top, #7a7667 0%, #9c9c9c 100%);
+  background-image:-moz-linear-gradient(top, #7a7667 0%, #9c9c9c 100%);
+  filter:progid:DXImageTransform.Microsoft.Gradient(GradientType=linear, StartColorstr=#7a7667, EndColorstr=#9c9c9c);
+}
+
+#waiting_overlay { background-image: url(/images/theme/rotate_gray_black.gif); }
+#waiting_overlay.white, #main-panel.loading { background-image: url(/images/theme/rotate_gray_white.gif); }

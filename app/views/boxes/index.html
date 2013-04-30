@@ -1,0 +1,76 @@
+<header id="toolbar-wrapper">
+  <div id="toolbar-container">
+    <div class="tagtool" id="tagtool">
+      <div id="toggletags-button" class="button icon-tags" onclick="Velox.toggleTagsPanel()"></div>
+      <div id="resettags-button" class="button icon-check-empty right" onclick="Archives.resetTags()" title="<%= t('toolbar.uncheck') %> (ESC)"></div>
+    </div>
+    <div class="toolbar" id="toolbar">
+      <form action="" id="quick_search" method="post" onsubmit="return false;">
+        <fieldset>
+          <label for="search" class="left"></label> 
+          <input class="search-field" id="search" name="q" type="text" value="" />
+          <a href="#" title="<%= t('toolbar.reset') %> (ESC)" id="search_reset_button"> </a>
+        </fieldset>
+      </form>
+
+      <div class="group">
+        <div id="refresh-button" class="button icon-refresh" title="<%= t('toolbar.refresh') %> (Ctrl+R)" onclick="Archives.refresh()"></div>
+        <div id="view-list-button" class="button switch icon-th-list" title="<%= t('toolbar.listview') %> (1)" onclick="Archives.showList()"></div>
+        <div id="view-big-thumbs-button" class="button switch icon-th-large" title="<%= t('toolbar.gridview') %> (2)" onclick="Archives.showThumbs()"></div> 
+      </div>
+
+      <div class="group">
+        <div id="add-button" class="button icon-plus" title="<%= t('toolbar.createbox') %> (A)" data-message="<%= t('boxes.error-limit') %>" onclick="Archives.createBox()"></div> 
+        <div id="restore-button" class="button icon-undo" title="<%= t('toolbar.restorebox') %> (Z)" onclick="Archives.restoreSelected()"></div>
+        <div id="remove-button" class="button icon-remove" title="<%= t('toolbar.archive') %> (Del)" onclick="Archives.removeSelected()"></div>      
+        <div id="delete-button" class="button icon-trash" title="<%= t('toolbar.deletebox') %> (Del)" onclick="Archives.deleteSelected()"></div>
+      </div>
+
+      <div class="group">
+        <div id="edit-button" class="button icon-edit" title="<%= t('toolbar.managebox') %> (E)" onclick="Archives.editBox()"></div>
+        <div id="receive-button" class="button icon-inbox" title="<%= t('toolbar.sendbox') %> (R)" onclick="Archives.showReceiveLink()"></div>
+        <div id="browse-button" class="button icon-external-link" title="<%= t('toolbar.browse') %> (Return)" onclick="Archives.browseBox()"></div> 
+      </div>
+    </div>
+  </div>
+</header>
+
+<aside id="filter-panel">
+  <div class="toolbar-extension">
+  	<header><h3><%= t('filter.systemtag') %></h3></header>
+    <div id="auto_tags" class="matrixselect">
+      <div class="autotag" id="autotag_activated" onclick="Archives.toggleAutotagFilter('activated')"><%= t('boxes.activated') %></div>
+      <div class="autotag" id="autotag_deactivated" onclick="Archives.toggleAutotagFilter('deactivated')"><%= t('boxes.deactivated') %></div>
+      <div class="autotag" id="autotag_owned" onclick="Archives.toggleAutotagFilter('owned')"><%= t('boxes.owned') %></div>
+      <div class="autotag" id="autotag_invited" onclick="Archives.toggleAutotagFilter('invited')"><%= t('boxes.invited') %></div>
+      <div class="autotag" id="autotag_nofiles" onclick="Archives.toggleAutotagFilter('nofiles')"><%= t('boxes.emptied') %></div>
+      <div class="autotag" id="autotag_nomembers" onclick="Archives.toggleAutotagFilter('nomembers')"><%= t('boxes.nomembers') %></div>
+      <div class="autotag" id="autotag_notags" onclick="Archives.toggleAutotagFilter('notags')"><%= t('boxes.notags') %></div>
+    </div>
+  </div>
+</aside>
+
+<article id="archives-panel">
+  <div id="archives-container">
+    <!-- Boxes will be pushed here -->
+  </div>
+</article>
+
+<% if (app.settings.env == 'development') { %>
+<script src="/javascripts/archives.js?v=<%= app.version %>"></script>
+<% } %>
+
+<script>
+
+  var doSearch = function(element, value) {
+    new Ajax.Request('/boxes/search', {
+      asynchronous: true,
+      evalScripts: true,
+      parameters: 'q=' + encodeURIComponent(value)
+    });
+  };
+
+  Archives.initialize({
+    viewType: "<%=session.user.settings.viewType %>"
+  });
+</script>

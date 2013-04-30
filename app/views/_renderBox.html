@@ -1,0 +1,15 @@
+<%
+boxes.forEach(function(box) { 
+  var _focus = selected.id == box.id
+    , _owned = box.owner == session.user.id
+    , _mybox = box.type == 4
+    , _share = box.type == 3
+    , type = _mybox ? 'assets' : _share && box.status != 2 ? 'project': 'temporary'
+    , icon = _mybox ? 'home'   : _share && box.status != 2 ? 'folder-open' : 'folder-close'
+    , remove = type == 'project' || type == 'temporary' ? '<span class="remove hint icon-remove" title="' + (_owned ? t('box.archive') : type == 'temporary' ? t('box.close') : t('box.leave')) + (_focus && ' (Ctrl+W)' || '') + '" onclick="Velox.removeBox(\'' + box.id + '\', ' + _owned + ')"></span>' : '';
+%>
+  <li class="tab <%=type%>">
+    <a href="/assets/<%= _encode64(box.id) %>" class="icon-<%=icon%> <%= _focus && 'active' || '' %>" data-icon="icon-<%=icon%>" id="nav_<%=box.id%>" title="<%= box.name %>"><%= box.name %></a>
+    <%-remove%>
+  </li>
+<% });%>

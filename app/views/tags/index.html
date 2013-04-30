@@ -1,0 +1,50 @@
+<% if (wrapper) { %>
+<div class="panel-header">
+  <div class="title icon-tag"><%= t('tags.title') %></div>
+  <div class="close" onclick="Velox.hidePanels()"><%= t('actions.close-panel') %></div> 
+</div>
+
+<div class="panel-contents" id="tags-panel-content">  
+<% } %>
+
+  <div class="preview">
+    <span class="assets-badge"><%= files.length %></span>
+    <div class="matrix-preview">
+
+      <%
+        var file, prop, len, i, size = 0;
+        for (i = 0, len = files.length; i < len; i++) {
+          file = files[i];
+          prop = _file(file, params.box);
+          size += file.size;
+          if (i > 8) continue;
+      %>
+
+      <span class="<%= (files.length == 1 ? 'thumb-big ' : ' ') + prop.thumb %>">
+        <img src="<%= prop.rel %>" title="<%=file.name%>" <%- prop.preview ? 'onclick="Assets.preview(\'' + file.id + '\', false)"' : '' %>/>
+      </span>
+
+      <% 
+        }
+      %>
+    </div>
+  </div>
+
+  <p class="panel-hint"><%= t('tags.hint') %></p>
+  <div class="info" style="zoom:1;margin-left:0px;">
+    <div class="block">
+      <% tags.forEach(function(tag) {
+        var className = 'normal';
+        if (tag.count) className = 'used';
+        if (tag.count == files.length) className = 'active';
+        %>
+        <div id="edit_multi_<%= tag.id %>" style="overflow:hidden;height:16px" class="tag <%= className %>" onclick="Assets.toggleTagOnSelected('<%= tag.id %>');">
+          <b><%= tag.name %></b> (<%= tag.count %>)
+        </div>
+      <% }); %>
+    </div>
+  </div>
+
+<% if (wrapper) { %>
+</div>
+<% } %>

@@ -1,0 +1,98 @@
+<% if (verified) { %>
+<div id="confirmation_hint">
+ <div id="confirmation-success">
+   <h1><%= t('delivery.success') %></h1><br />
+   <%- t('delivery.success-message') %>
+ </div>
+ <div id="confirmation-failure" style="display: none;">
+   <h1>The verification email is stuck¦</h1><br />
+   The address verification message could not be sent, meaning the file you uploaded cannot be sent either.
+   This is often due to a temporary issue with the mail server in charge of such matters.
+   Our engineers have been notified of the problem and will look into it right away. Therefore,
+   we invite you to repeat the upload process in about an hour, and apologise for the inconvenience.
+ </div>
+</div>
+<script>
+  (function() {
+    var socket = io.connect(socketUrl, {secure: location.protocol == 'https:'});
+    socket.emit('message', {action: 'notifyNewItem', guid: '<%=box.id%>'});    
+  })();
+</script>
+
+
+<% } else { %>
+
+<div id="upload-status" style="display: none;">
+  <div id="before-upload">
+    <h1><%= t('delivery.upload') %></h1>
+    <p class="note"><%= t('delivery.upload-message') %></p>
+  </div>
+
+  <div id="after-upload" style="display: none;">
+    <h1><%= t('delivery.ready') %></h1>
+    <p class="note"><%= t('delivery.ready-message') %></p>
+  </div>
+
+  <div id="after-upload-success" style="display: none;">
+    <h1><%= t('delivery.success') %></h1>
+    <p class="note"><%- t('delivery.success-message') %></p>
+  </div>
+
+  <div id="after-upload-failed" style="display: none;">
+    <h1><%= t('delivery.failed') %></h1>
+    <p class="note wrong"><%- t('delivery.failed-message') %></p>
+    <p class="note size" style="display: none;"><%- t('delivery.wrong-size') %></p>
+  </div>
+
+  <div id="upload-status-wrapper">
+    <div class="progressBar" id="UploadProgressBar" style="width:400px;">
+      <div class="border">
+        <div class="background" id="progressbar" style="width: 100%">
+          <div class="foreground" ></div>
+        </div>
+      </div>
+    </div>
+    <div class="uploadStatus" id="UploadStatus1"></div>
+  </div>
+  <div id="upload-finish-message" style="display:none;"></div>
+  <div id="upload-finish-functions" style="display:none"></div>
+</div>
+
+<form action="/delivery/<%=user.id%>/<%=box.id%>" enctype="multipart/form-data" id="upload" method="post" target="UploadTarget1">
+  <h1>
+    Sendbox for 
+    <% if (box.type == 4) { %>
+      <%= user.name %>
+    <% } else { %>
+      <%= box.name %>(<%= user.name %>)
+    <% } %>
+  </h1>
+
+  <iframe id="UploadTarget1" name="UploadTarget1" src="" style="width:0px;height:0px;border:0"></iframe>
+  <p>
+    <label for="drop_file"><%= t('delivery.select-file') %></label><br />
+    <input id="drop_file" name="drop[file]" size="30" type="file" />
+  </p>
+  <p>
+    <label for="drop_description"><%= t('share.message') %></label><br />
+    <textarea cols="40" id="drop_description" name="drop[description]" rows="4" style="width: 300px;"></textarea>
+  </p>
+
+  <p>
+    <label for="drop_email"><%= t('user.email') %> <span><%= t('global.required') %></span></label>
+    <% if (session.email) { %>
+      <input id="drop_email" name="drop[verified_email]" value="<%= session.email %>" size="46" style="width: 300px;" type="text" readonly="readonly" />
+    <% } else { %>
+      <span class="note"><%= t('delivery.email-protected') %></span><br />
+      <input id="drop_email" name="drop[email]" size="46" style="width: 300px; margin-bottom: 8px;" type="text" /><br />
+      <span id="email_validation_error" style="display: none;">This is not a valid email address.</span><br />
+    <% } %>
+  </p>
+  <p>
+    <button type='submit' class='button' style="margin-left: -5px;" disabled="disabled" id="file_upload_submit"><span class='left'></span><span class='middle'><%= t('actions.upload') %></span><span class='right'></span></button>
+  </p>
+</form>
+
+<script src="/javascripts/sendbox.js?v=<%= app.version %>"></script>
+
+<% } %>

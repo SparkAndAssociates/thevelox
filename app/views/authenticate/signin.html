@@ -1,0 +1,67 @@
+<form action="/signin" onsubmit="return userLogin(this)" method="post" class="signin">
+  <p id="message" style="display:block;">
+    <% if (error.length > 0) { %>
+      <%= error%>
+    <% } else if (info.length > 0) { %>
+     <span style="color:blue;"><%= info%></span>
+    <% } %>
+  </p>
+
+  <div class="form-section login">
+    <label for="username"><%= t('user.username') %></label>
+    <input type="text" name="username" id="username" placeholder="<%= t('user.username-help') %>" size="30" value="<%=rememberme? rememberme : '' %>" />
+  </div>
+
+  <div class="form-section login">
+    <label for="password"><%= t('user.password') %></label>
+    <input type="password" name="password" id="password" size="30" placeholder="<%= t('user.password-help') %>" value="" />
+  </div>
+
+  <div class="form-submit login">
+    <input type="submit" value="<%= t('global.signin') %>" />
+  </div>
+
+  <p style="margin-top: 40px">
+    <input type="checkbox" name="rememberme" <%=rememberme ? "checked='checked'" : ""%> />
+    <label for="rememberme" ><%= t('global.rememberme') %></label>
+  </p>
+  <p>
+    <a href="/signup"><%= t('global.signup') %></a> | <a href="/releasenote"><%= t('global.releasenote') %></a>
+  </p>
+
+  <input id="returnurl" name="returnurl" type="hidden" value="<%=typeof returnUrl == 'string' ? returnUrl : ''%>" />
+</form>
+
+<script>
+  function showNotice(form) {
+    $('notice').show().down('button').activate().observe('click', function() {
+      form.submit();
+    });
+  }
+
+  function userLogin(form) {
+    if (!form.username.value || !form.password.value) {
+      $('message').innerHTML = "<b><%= t('global.signin-error') %></b>";
+      $('message').style.display = "block";
+      Effect.Shake('box');
+      return false;
+    }
+
+    //showNotice(form);
+    return true;
+  }
+
+  var hasError = <%= (error.length > 0) ? 1 : 0 %>;
+  if (hasError) {
+    Event.observe(window, 'load', function() {
+      Effect.Shake('box');
+    });
+  }
+
+  if (!Prototype.Browser.IE && !Modernizr.touch) {
+    if (!$('username').value) Field.focus('username');
+    else Field.focus('password');
+  }
+
+  placeholderShiv();
+</script>

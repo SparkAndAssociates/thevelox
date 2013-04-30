@@ -1,0 +1,22 @@
+<%
+  files.forEach(function(file) {
+    var _prop = _file(file, params.box);
+%>
+  <div class="asset <%= _prop.asset %>" id="document_<%= file.id %>" title="<%= file.name %> (v.<%= _prop.ver %>)">
+    <div class="wrapper">
+      <p class="a-thumb <%= _prop.thumb %>">
+        <img src="<%= _prop.src %>" rel="<%= _prop.rel %>" alt="" style="<%= _prop.style %>" />
+      </p>
+
+      <p class="a-details">
+        <b class="a-title" title="<%= file.name %>"><span><%= _sanitize(file.name).entityEncode() %></span></b>
+        <b class="a-type type-<%= file.ext %>" <%= file.scribd && file.scribd.id ? 'id="' + file.scribd.id + '"' : ''%>><%= file.ext %></b>
+        <a href="#" title="Show available versions" class="version ver-<%= _prop.ver %>"><%= _prop.ver %></a>
+        <b data-size="<%= file.size %>" class="a-size"><%= _size(file.size) %></b>
+        <b class="a-uploaded"><%= _when(file.uploadDate, t.locale, session.user.timezone) %></b>
+        <b class="a-author"><%= _name(file, session.user.dispname) %></b>
+        <b class="a-date"><%= _format(file.uploadDate, t.locale, session.user.timezone) %></b>
+      </p>
+    </div>
+  </div>
+<% }); %>

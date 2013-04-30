@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="<%=t.locale%>"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="<%=t.locale%>"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="<%=t.locale%>"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="<%=t.locale%>"> <!--<![endif]-->
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="<%=t.locale%>" />
+
+  <meta name="apple-mobile-web-app-capable" content="yes">  
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=9;"> 
+
+  <title><%= t('global.title') %> &gt; <%= t('global.signin') %></title>
+
+  <link rel="apple-touch-startup-image" href="/apple-touch-startup-image.png">
+
+  <link href="/stylesheets/auth.css?v=<%= app.version %>" media="screen" rel="Stylesheet" type="text/css" />
+  <link href="/stylesheets/font-awesome.css?v=<%= app.version %>" media="screen" rel="Stylesheet" type="text/css" />
+  <!--[if lt IE 9]><script src="/javascripts/vendor/html5shiv.js?v=<%=app.version%>"></script><![endif]-->
+  <script src="/javascripts/vendor/prototype.js?v=<%= app.version %>" type="text/javascript"></script>
+  <script src="/javascripts/vendor/effects.js?v=<%= app.version %>" type="text/javascript"></script>
+  <script src="/javascripts/extensions.js?v=<%= app.version %>"></script>
+  
+  <style type="text/css" media="screen">
+    /* branding */
+    #header, #logo-preview {
+      background-image: -webkit-gradient(linear, left top, left bottom, from(#000000), to(#32302E));
+      background-image: -moz-linear-gradient(top, #000000, #32302E);
+      filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=linear, StartColorstr=#000000, EndColorstr=#32302E);
+      background-color: #000000;
+    }
+  </style>
+  <script>
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)) {
+      $(document.head).insert('<meta name="viewport" content="width=550; user-scalable=0;">');
+    }
+  </script>
+
+</head>
+<body>
+
+  <div id="box-wrapper">
+    <section id="box">
+      <header id="header">
+        <div class="logo">
+          <h1 class="icon-large icon-cloud"><a href="/" style="text-decoration: none; color: #fff; background: none;"><%= t('global.title') %></a></h1>
+        </div>
+      </header>
+      <article id="content"> 
+        <%- body %>
+      </article>
+      <p class="version">v<%= app.version %></p>
+    </section>
+  </div>
+
+  <script type="text/javascript">
+  var _gaq = _gaq || []
+    , pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';
+
+  _gaq.push(['_require', 'inpage_linkid', pluginUrl]);
+  _gaq.push(['_setAccount', '<%= app.config.trackCode %>']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+  </script>
+</body>
+</html>

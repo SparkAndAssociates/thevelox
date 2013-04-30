@@ -1,0 +1,64 @@
+<%
+  if (archives.length) {
+%>
+<ul>
+<%
+    archives.forEach(function(box) {
+      var _members = []
+        , _filters = [];
+
+      box.members.forEach(function(id) {
+        if (box.owner != id) _members.push('<span id="member_' + id + '">' + members[id].name + '</span>');
+      });
+      _members = _members.join(', ');
+      
+      var _tags = box.tags.map(function(tag) {
+        return '<span id="member_' + tag.id + '">' + tag.name + '</span>';
+      }).join(', ');
+
+      _filters.push(box.status == 1 ? 'activated' : 'deactivated');
+      _filters.push(box.owner == session.user.id ? 'owned' : 'invited');
+      box.members.length == 1 && _filters.push('nomembers');
+      !box.tags.length && _filters.push('notags');
+      !box.size && _filters.push('nofiles');
+
+%>
+  <li class="box <%= _filters.join(' ') %>" id="box_<%= box.id %>">
+    <% if (box.status == 1) { %><p class="status-badge"><%= t('boxes.activated') %></p><% } %>
+    <h4 class="icon-folder-<%= box.status == 1 ? 'open' : 'close' %>">
+      <%= box.name %>
+    </h4>
+
+    <dl>
+      <dt><%= t('boxes.owner') %></dt> <dd class="owner"><%= members[box.owner].name %></dd>
+      <dt><%= t('boxes.members') %></dt> <dd class="members"><%- _members || t('boxes.nomembers') %></dd>
+      <dt><%= t('boxes.created') %></dt> <dd><%= _format(box.createDate, t.locale, session.user.timezone) %></dd>
+      <dt><%= t('boxes.updated') %></dt> <dd><%= _format(box.lasModifyDate, t.locale, session.user.timezone) %></dd>
+      <dt><%= t('boxes.files') %></dt> <dd class="length"><%= _commify(box.fileLength || 0) %></dd>
+      <dt><%= t('boxes.size') %></dt> <dd class="size"><%= box.size ? _size(box.size) : t('boxes.emptied') %></dd>
+      <dt><%= t('boxes.tags') %></dt> <dd><%- _tags || t('boxes.notags') %></dd>
+    </dl>
+  </li>
+<%
+    });
+%>
+</ul>
+<%
+  }
+%>
+
+<div id="no-boxes" class="message" <%- archives.length ? 'style="display: none"' : '' %>>
+  <%= t('boxes.no-boxes') %>
+  <div class="info"><%- t(['global.reset' , '<a href="#" onclick="Archives.resetTags(); return false;">' + t('actions.reset') + '</a>']) %></div>
+</div>
+
+<script>
+  Archives.setAssetsCount(<%= archives.length %>);
+  Element.update("usage-info", "<%= _size(size) + ' ' + (_negative(size) ? t('global.exceeded') : t('global.available')) %>")["<%= _negative(size) ? 'addClassName' : 'removeClassName' %>"]('exceeded');
+  Archives.resetAssets();
+  Archives.initAfterLoad();
+  Archives.updateMenu();
+  $('search').value = ''; // use localStoreage
+  Velox.resize();
+  Velox.pageTracker('/boxes/list');
+</script>

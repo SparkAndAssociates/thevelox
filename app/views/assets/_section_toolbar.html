@@ -1,0 +1,63 @@
+<div id="toolbar-container">
+  <div class="tagtool" id="tagtool">
+    <div id="toggletags-button" class="button icon-tags" onclick="Velox.toggleTagsPanel()"></div>
+    <div id="managetags-button" class="button icon-tags active" title="<%= t('toolbar.managetag') %>" onclick="Assets.toggleManagetags()"></div>
+    <div id="resettags-button" class="button icon-check-empty" title="<%= t('toolbar.uncheck') %> (ESC)" onclick="Assets.resetTags()"></div>
+  </div>
+  <div class="toolbar" id="toolbar">
+    <!--a href="#" class="btn-changeview" id="" title=""><span>Manage tags</span></a-->
+
+    <form action="" id="quick_search" method="post" onsubmit="return false;">
+      <fieldset>
+        <label for="search" class="left"></label>
+        <input class="search-field" id="search" name="q" type="text" value="" />
+        <a href="#" title="<%= t('toolbar.reset') %> (ESC)" id="search_reset_button"> </a>
+      </fieldset>
+    </form>
+
+    <div class="group">
+      <div id="refresh-button" class="button icon-refresh" title="<%= t('toolbar.refresh') %> (Ctrl+R)" onclick="if(!Velox.active('refresh'))return;Assets.nothingHappened=true;Assets.refresh()"></div>
+      <div id="view-list-button" class="button switch icon-th-list" title="<%= t('toolbar.listview') %> (1)" onclick="Assets.showList()"></div>
+      <div id="view-thumbs-button" class="button switch icon-th" title="<%= t('toolbar.smallview') %> (2)" onclick="Assets.showThumbs(1)"></div> 
+      <div id="view-big-thumbs-button" class="button switch icon-th-large" title="<%= t('toolbar.largeview') %> (3)" onclick="Assets.showThumbs(3)"></div> 
+    </div>
+
+    <div class="group">
+      <div id="add-button" class="button icon-upload-alt" title="<%= t('toolbar.upload') %> (A)" onclick="Assets.browseFiles(event)"></div>
+      <div id="download-button" class="button icon-download-alt" title="<%= t('toolbar.download') %> (Return)" onclick="Assets.download('download-form')"></div>
+      <div id="copy-button" class="button icon-copy" title="<%= t('toolbar.copy') %> (C)" onclick="Assets.copySelectedTo()"></div>
+      <div id="trash-button" class="button icon-trash" title="<%= t('toolbar.trash') %> (Del)" onclick="Assets.trashSelected()"></div>
+    </div>
+
+    <div class="group">
+      <div id="preview-button" class="button icon-eye-open" title="<%= t('toolbar.preview') %> (Return)" onclick="Assets.preview()"></div>
+      <% if (selected.type == 3) { %>
+      <div id="note-button" class="button icon-comment" title="<%= t('toolbar.note') %> (W)" onclick="Assets.createNote()"></div>
+      <% } %>
+      <div id="tags-button" class="button icon-tag" title="<%= t('toolbar.tags') %> (T)" onclick="Assets.showTagsPanel()"></div>
+      <div id="edit-button" class="button icon-edit" title="<%= t('toolbar.edit') %> (E)" onclick="Assets.showEditPanel()"></div>
+      <div id="share-button" class="button icon-share-alt" title="<%= t('toolbar.share') %> (S)" onclick="Assets.showSharePanel()"></div>
+    </div>
+
+    <div class="group">
+      <div id="receive-button" class="button <%= selected.type == 3 && selected.owner == session.user.id ? 'left' : '' %> icon-inbox" title="<%= t('toolbar.sendbox') %> (R)" onclick="Assets.showReceiveLink()"></div>
+      <% if (selected.type == 3 && selected.owner == session.user.id) { %>
+      <div id="managebox-button" class="button icon-group" title="<%= t('toolbar.editbox') %>" onclick="Assets.showManageBox()"> </div>
+      <% } %>
+    </div>
+
+    <div class="group">
+      <div id="restore-button" style="display: none;" class="button icon-undo" title="<%= t('toolbar.restore') %> (Z)" onclick="Assets.restoreSelected()"></div>
+      <div id="delete-button" style="display: none;" class="button icon-remove" title="<%= t('toolbar.delete') %>  (Del)" onclick="Assets.deleteSelected()"></div>
+      <div id="deleteall-button" style="display: none;" class="button active icon-trash" title="<%= t('toolbar.deleteall')%> (Ctrl+Del)" onclick="Assets.deleteAll()"></div>
+    </div>
+
+  </div>
+</div>
+  
+<div id="adminbar-container" style="display:none">
+  <div class="adminbar" id="adminbar">
+    <a href="#" class="btn-changeview" title="Switch to assets view" onclick="Velox.toggleToolbar(); return false;"><span>Assets view</span></a>
+    <h3>Manage your tags</h3>
+  </div>
+</div>

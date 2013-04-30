@@ -1,0 +1,30 @@
+<div id="dialog" class="conflict">
+  <h3 class="icon-warning-sign"><span id="conflict_count"></span><%= t('conflict.title') %></h3>
+
+  <form id="share_form" class="dialog-content" method="get" onsubmit="return Assets.showConflictDialog(this);">
+    <p style="font-size: 13px; margin: 10px 0;"><%= t('conflict.message') %></p>
+
+    <input type="hidden" id="conflict-action" name="action" value="version"/>
+    <input type="hidden" name="_id" value="<%=file.id%>"/>
+    <input type="hidden" name="name" value="<%=file.name%>"/>
+    <fieldset>
+      <label><%=file.name%></label>
+      <p class="description">
+        <%= file.description ? file.description : t('conflict.no-description') %>
+      </p>
+      <p><span><%= t('conflict.uploaded') %></span> <%=file.author%></p>
+      <p><span><%= t('conflict.updated') %></span> <%= _format(file.uploadDate, t.locale, session.user.timezone) %></p>
+      <p><span><%= t('conflict.version') %></span> <%= file.versions && file.versions.length + 1 || 1 %></p>
+    </fieldset>
+
+    <fieldset style="float: left; display: none;" id="applyall">
+      <input class="checkbox-input" name="applyall" type="checkbox" /> <%= t('conflict.applyall') %>
+    </fieldset>
+
+    <fieldset class="actions">
+      <button class="button ok"><%= t('conflict.addversion') %></button>
+      <button class="button new" onclick="$('conflict-action').value = 'new';"><%= t('conflict.newitem') %></button>
+      <button class="button" id="cancel" onclick="Velox.hideDialog(event)"><%= t('actions.cancel') %></button>
+    </fieldset>
+  </form>
+</div>

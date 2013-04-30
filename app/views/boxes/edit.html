@@ -1,0 +1,168 @@
+<div id="dialog" class="editbox">
+  <h3 class="icon-folder-close"><%= box ? t('box.title-edit') : t('box.title-create') %></h3>
+
+  <form action="/boxes/<%=box ? box.id + '/' : ''%><%=locals.actionName%>" id="share_form" class="dialog-content" method="post">
+    <input name="edit_mode" type="hidden" value="<%= box ? "edit" : "create"%>"/>
+    <%
+    if (box) {
+      var userIds = [];
+      users.forEach(function(user) {
+        if (user.id != session.user.id) userIds.push(user.id);
+      });
+    %>
+      <input name="current_members" type="hidden" value="<%= userIds.join(',') %>"/> 
+      <input name="box_id" type="hidden" value="<%= box.id %>"/> 
+      <input name="status" type="hidden" value="<%= box.status %>"/> 
+    <%
+    }
+    %>
+    <fieldset id="userfield" style="float: right; width: 180px; padding-left: 10px; height: 100px;">
+      <label for="user_name"><%= t('box.members') %> <span><%= t('global.required') %></span></label>
+
+      <input id="user_name" maxlength="45" size="22" type="text" /> 
+      <button type="submit" id="add_user_btn">+</button>
+
+        <ul id="userlist">
+          <li id="userlist_<%=session.user.name%>" class="you">
+            <span class="users-edit-user"><span class="icon-user"><%= session.user.name %></span></span>
+          </li>
+          
+        <%
+        if (box) {
+          users.forEach(function(user) { 
+            if (user.name != session.user.name) {
+        %>
+
+          <li id="userlist_<%=user.name%>">
+            <span class="users-edit-controls">
+              <input name="message[to]" type="hidden" value="<%=user.name%>"/>
+              <input name="message[ids]" type="hidden" value="<%=user.id%>"/>
+              <a class="users-edit-del icon-remove" href="#" onclick="new Effect.Fade(this.up('li'), {duration: 0.5, afterFinish:function(effect) {Element.remove(effect.element)}}); return false;" title="<%= t('box.remove-user') %>"><%= t('actions.remove') %></a>
+            </span>
+            <span class="users-edit-user"><span class="icon-user"><%= user.name %></span></span>
+          </li>
+
+      <%
+          }});
+      }
+
+      %>
+      </ul>
+
+    </fieldset>
+
+    <fieldset>
+      <label for="message[subject]"><%= t('box.name') %> <span><%= t('global.required') %></span></label>
+      <input class="text-input" id="message_subject" name="message[subject]" maxlength="25" type="text" value="<%= box? box.name : '' %>" />
+    </fieldset>
+
+    <fieldset>
+      <label for="message_message"><%= t('box.description') %></label>
+      <textarea cols="40" id="message_message" name="message[message]" rows="5" style="height: 84px"><%= box && box.description?  box.description : '' %></textarea>
+    </fieldset>
+
+
+    <fieldset class="actions">
+      <% if (box) { %>
+      <button class="button ok"><%= t('actions.apply') %></button>
+      <% } else { %>
+      <button class="button ok"><%= t('actions.start') %></button>
+      <% } %>
+      
+      <button class="button" id="cancel" onclick="Velox.hideDialog(event)"><%= t('actions.cancel') %></button>
+    </fieldset>
+  </form>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  $('message_subject').activate().observe('keyup', function(event) {
+    var input = $('message_subject')
+      , msgEl = input.previous().down('span');
+  
+    input.timer && clearTimeout(input.timer);
+    input.timer = setTimeout(function () {
+      msgEl.update('').removeClassName('ok').removeClassName('error')
+  
+      new Ajax.Request('/boxes/checkname', {
+        method: 'post',
+        parameters: {
+          boxname: input.value.strip()
+        },
+        onSuccess: function(req) {
+          msgEl.update(req.responseText).addClassName('ok');
+        },
+        onFailure: function(req) {
+          msgEl.update(req.responseText).addClassName('error');
+        }
+      });
+    }, 500);
+  });
+
+  Event._observeShortcuts = false;
+
+  $('share_form').observe('submit', function(event) {
+    var form = event.element();
+
+    event.stop();
+
+    if (!form['message[subject]'].value) {
+      $('message_subject').activate().previous().down('span').addClassName('error');
+      return false;
+    }
+
+    if (!form['message[to]']) {
+      $('user_name').activate().previous().down('span').addClassName('error');
+      return false;
+    }
+
+    form['message[subject]'].value = form['message[subject]'].value.strip();
+    Velox.saveBox(form);
+  });
+
+
+  $('add_user_btn').observe('click', function(event) {
+    event.stop();
+
+    var input = $('user_name');
+    var msgEl = input.previous().down('span');
+    var parms = Form.serialize('share_form');
+    var query = parms.toQueryParams();
+
+    msgEl.update('Required').removeClassName('error');
+    
+    if (query) {
+      if (typeof query['message[to]'] != 'object') query['message[to]'] = [query['message[to]']];
+      for (var i = 0; i <= query['message[to]'].length; i++) {
+        if (query['message[to]'][i] == input.value) {
+          msgEl.update('Duplicated').addClassName('error');
+          input.activate()
+          return false;
+        }
+      }
+    }
+    
+    new Ajax.Request('/boxes/checkuser', {
+      method: 'post',
+      parameters: {
+        username: input.value.strip()
+      },
+      onSuccess: function(req) {
+        var data = req.responseJSON;
+        $('userlist').insert([
+        '<li id="userlist_' + data.name + '">',
+          '<span class="users-edit-controls">',
+            '<input name="message[to]" type="hidden" value="' + data.name + '"/>',
+            '<input name="message[ids]" type="hidden" value="' + data.id + '"/>',
+            '<a class="users-edit-del icon-remove" href="#" onclick="new Effect.Fade(this.up(\'li\'), {duration: 0.5, afterFinish:function(effect) {Element.remove(effect.element)}}); return false;" title="<%= t('box.remove-user') %>"><%= t('actions.remove') %></a>',
+          '</span>',
+          '<span class="users-edit-user"><span class="icon-user">' + data.name + '</span></span>',
+        '</li>'
+        ].join(''));
+        input.activate().value = '';
+      },
+      onFailure: function(req) {
+        msgEl.update(req.responseText).addClassName('error');
+      }
+    });
+  });
+</script>
